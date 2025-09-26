@@ -3,8 +3,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
+  # Remove PR trigger for production deployment
+  # pull_request:
+  #   branches: [main]
 
 permissions:
   contents: read
@@ -12,6 +13,7 @@ permissions:
   id-token: write
 
 jobs:
+  # Production deployment workflow - tests are handled by lefthook pre-push in development
   build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
@@ -36,9 +38,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
-
-      - name: Run tests
-        run: pnpm test
 
       - name: Build
         run: pnpm build
