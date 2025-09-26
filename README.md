@@ -93,3 +93,17 @@ The application is automatically deployed to GitHub Pages at:
 - **Data-testid approach** for reliable, maintainable tests
 - **Vitest framework** for fast test execution
 - **Component isolation** testing for better reliability
+
+## Security Considerations
+
+⚠️ **Important Note**: This is a **demonstration project** for portfolio purposes.
+
+**API Key Security**: The Financial Modeling Prep API key is exposed in the client-side bundle, which is acceptable for this demo using the free tier but **not recommended for production**.
+
+**Production Recommendations**:
+- Use backend proxy servers to hide API keys
+- Implement serverless functions (Vercel, Netlify) 
+- Utilize cloud environment variables (Railway, Amplify)
+- Add user authentication and rate limiting
+
+See [ADR-003](./docs/adr/003-api-key-security-considerations.md) for detailed security architecture decisions and production-ready alternatives.
