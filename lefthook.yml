@@ -1,0 +1,22 @@
+pre-commit:
+  parallel: true
+  commands:
+    eslint:
+      stage_fixed: true
+      glob: "*.{js,ts,jsx,tsx}"
+      run: pnpm run lint --fix {staged_files} --quiet
+    prettier:
+      glob: "*.{js,ts,jsx,tsx,json,md}"
+      run: pnpm dlx prettier {staged_files} --write
+    typecheck:
+      glob: "*.{ts,tsx}"
+      run: pnpm run type-check
+pre-push:
+  parallel: true
+  commands:
+    test:
+      run: pnpm run test
+    build:
+      run: pnpm run build
+    audit:
+      run: pnpm audit --audit-level=moderate
