@@ -296,7 +296,7 @@ Configure TypeScript for optimal developer experience and type safety.
 
 | Category             | Decision                | Implementation Status | Rationale                              |
 | -------------------- | ----------------------- | --------------------- | -------------------------------------- |
-| **Framework**        | React 18 + Vite         | ✅ Complete           | Modern, fast development               |
+| **Framework**        | React 19 + Vite         | ✅ Complete           | Modern, fast development               |
 | **Styling**          | Tailwind CSS            | ✅ Complete           | Utility-first, indigo design system    |
 | **Data Fetching**    | SWR + localStorage      | ✅ Complete           | Perfect for read-heavy stock data      |
 | **State Management** | React Context + SWR     | ✅ Complete           | Right-sized for application complexity |
