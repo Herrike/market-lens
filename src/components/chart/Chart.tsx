@@ -7,6 +7,7 @@ import {
   SYMBOL_NAMES,
   isFreeTierSymbol,
 } from "@/utils/freeTierSymbols";
+import { handleApiError, getErrorSuggestion } from "@/utils/api-errors";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
@@ -53,10 +54,11 @@ const StockChart = () => {
 
   // Show error state (but only if not falling back to quote data)
   if (error && !(shouldUseFallback && quoteData)) {
-    console.error("Chart error:", error);
+    const errorInfo = handleApiError(error, "Failed to load chart data");
+    const suggestion = getErrorSuggestion(errorInfo.code);
 
     // Special handling for 402 Payment Required error with educational content
-    if (error.message.includes("402")) {
+    if (errorInfo.code === 402 || error.message.includes("402")) {
       return (
         <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-6 mb-6">
           <div className="text-center mb-4">
@@ -124,17 +126,43 @@ const StockChart = () => {
 
     // Regular error handling for other errors
     return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-        <p className="text-sm text-red-600 mb-2">
-          Error loading chart data for {selectedStock}
-        </p>
-        <p className="text-xs text-red-500 mb-2">{error.message}</p>
-        {error.message.includes("403") && (
-          <p className="text-xs text-red-400">
-            This might be an API key or rate limit issue. Check the console for
-            more details.
-          </p>
-        )}
+      <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6">
+        <div className="flex items-start">
+          <svg
+            className="h-5 w-5 text-red-400 dark:text-red-300 mt-0.5 flex-shrink-0"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <div className="ml-3 flex-1">
+            <h4 className="text-sm font-medium text-red-800 dark:text-red-200">
+              Chart Loading Error
+            </h4>
+            <p className="text-sm text-red-700 dark:text-red-300 mt-1">
+              {errorInfo.userMessage}
+            </p>
+            {suggestion && (
+              <p className="text-xs text-red-600 dark:text-red-400 mt-2 leading-relaxed">
+                💡 {suggestion}
+              </p>
+            )}
+            {errorInfo.code === 403 && (
+              <div className="mt-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md">
+                <p className="text-xs text-yellow-700 dark:text-yellow-300">
+                  <strong>Mobile users:</strong> Try these popular free symbols:
+                  AAPL, MSFT, GOOGL, TSLA, AMZN
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     );
   }

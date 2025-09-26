@@ -3,6 +3,7 @@ import { useCallback, useContext } from "react";
 import clsx from "clsx";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { useStockSearch } from "@/hooks/useStocks";
+import { handleApiError } from "@/utils/api-errors";
 
 const SearchModalForm = () => {
   const { searchQuery, setSearchQuery } = useContext(SearchContext);
@@ -84,7 +85,10 @@ const SearchModalForm = () => {
             id="search-error"
             className="mt-2 text-sm text-red-600 dark:text-red-400"
           >
-            {error.message || "Search failed. Please try again."}
+            {
+              handleApiError(error, "Search failed. Please try again.")
+                .userMessage
+            }
           </p>
         )}
       </div>

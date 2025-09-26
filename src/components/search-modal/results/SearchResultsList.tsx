@@ -1,5 +1,6 @@
 import type { Stock } from "@/types/api";
 import type { ApiError } from "@/types/api";
+import { handleApiError, getErrorSuggestion } from "@/utils/api-errors";
 import SearchResultItem from "./SearchResultItem";
 
 interface SearchResultsListProps {
@@ -41,11 +42,14 @@ const SearchResultsList = ({
 
   // Error state
   if (error) {
+    const errorInfo = handleApiError(error, "Failed to search stocks");
+    const suggestion = getErrorSuggestion(errorInfo.code);
+
     return (
       <div className="mt-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-        <div className="flex items-center">
+        <div className="flex items-start">
           <svg
-            className="h-5 w-5 text-red-400 dark:text-red-300"
+            className="h-5 w-5 text-red-400 dark:text-red-300 mt-0.5 flex-shrink-0"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -57,13 +61,18 @@ const SearchResultsList = ({
               d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-          <div className="ml-3">
+          <div className="ml-3 flex-1">
             <h4 className="text-sm font-medium text-red-800 dark:text-red-200">
               Search Error
             </h4>
-            <p className="text-sm text-red-700 dark:text-red-300">
-              {error.message || "Failed to search stocks. Please try again."}
+            <p className="text-sm text-red-700 dark:text-red-300 mt-1">
+              {errorInfo.userMessage}
             </p>
+            {suggestion && (
+              <p className="text-xs text-red-600 dark:text-red-400 mt-2 leading-relaxed">
+                💡 {suggestion}
+              </p>
+            )}
           </div>
         </div>
       </div>

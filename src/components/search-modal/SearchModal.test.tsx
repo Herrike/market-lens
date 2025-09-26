@@ -91,7 +91,7 @@ describe("SearchModal Component - Search & Results Flow", () => {
       render(
         <SearchModalWrapper contextValue={{ searchModalToggle: true }}>
           <SearchModal />
-        </SearchModalWrapper>
+        </SearchModalWrapper>,
       );
 
       expect(screen.getByRole("dialog")).toBeInTheDocument();
@@ -102,7 +102,7 @@ describe("SearchModal Component - Search & Results Flow", () => {
       render(
         <SearchModalWrapper contextValue={{ searchModalToggle: false }}>
           <SearchModal />
-        </SearchModalWrapper>
+        </SearchModalWrapper>,
       );
 
       expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
@@ -112,14 +112,14 @@ describe("SearchModal Component - Search & Results Flow", () => {
       render(
         <SearchModalWrapper contextValue={{ searchModalToggle: true }}>
           <SearchModal />
-        </SearchModalWrapper>
+        </SearchModalWrapper>,
       );
 
       expect(
-        screen.getByLabelText(/search a stock by their code/i)
+        screen.getByLabelText(/search a stock by their code/i),
       ).toBeInTheDocument();
       expect(
-        screen.getByPlaceholderText("Enter stock symbol (e.g., AAPL)")
+        screen.getByPlaceholderText("Enter stock symbol (e.g., AAPL)"),
       ).toBeInTheDocument();
     });
   });
@@ -131,11 +131,11 @@ describe("SearchModal Component - Search & Results Flow", () => {
       render(
         <SearchModalWrapper contextValue={{ searchModalToggle: true }}>
           <SearchModal />
-        </SearchModalWrapper>
+        </SearchModalWrapper>,
       );
 
       const searchInput = screen.getByPlaceholderText(
-        "Enter stock symbol (e.g., AAPL)"
+        "Enter stock symbol (e.g., AAPL)",
       );
       await user.type(searchInput, "AAPL");
 
@@ -154,11 +154,11 @@ describe("SearchModal Component - Search & Results Flow", () => {
           }}
         >
           <SearchModal />
-        </SearchModalWrapper>
+        </SearchModalWrapper>,
       );
 
       const searchInput = screen.getByPlaceholderText(
-        "Enter stock symbol (e.g., AAPL)"
+        "Enter stock symbol (e.g., AAPL)",
       );
       const searchButton = screen.getByRole("button", {
         name: /search for stock/i,
@@ -182,11 +182,11 @@ describe("SearchModal Component - Search & Results Flow", () => {
           }}
         >
           <SearchModal />
-        </SearchModalWrapper>
+        </SearchModalWrapper>,
       );
 
       const searchInput = screen.getByPlaceholderText(
-        "Enter stock symbol (e.g., AAPL)"
+        "Enter stock symbol (e.g., AAPL)",
       );
       const searchButton = screen.getByRole("button", {
         name: /search for stock/i,
@@ -220,7 +220,7 @@ describe("SearchModal Component - Search & Results Flow", () => {
           }}
         >
           <SearchModal />
-        </SearchModalWrapper>
+        </SearchModalWrapper>,
       );
 
       expect(screen.getByText('Searching for "AAPL"...')).toBeInTheDocument();
@@ -245,11 +245,11 @@ describe("SearchModal Component - Search & Results Flow", () => {
           }}
         >
           <SearchModal />
-        </SearchModalWrapper>
+        </SearchModalWrapper>,
       );
 
       const searchInput = screen.getByPlaceholderText(
-        "Enter stock symbol (e.g., AAPL)"
+        "Enter stock symbol (e.g., AAPL)",
       );
       const searchButton = screen.getByRole("button", {
         name: /searching.../i,
@@ -280,11 +280,11 @@ describe("SearchModal Component - Search & Results Flow", () => {
           }}
         >
           <SearchModal />
-        </SearchModalWrapper>
+        </SearchModalWrapper>,
       );
 
       expect(
-        screen.getByText('2 results found for "AAPL"')
+        screen.getByText('2 results found for "AAPL"'),
       ).toBeInTheDocument();
       expect(screen.getByText("AAPL")).toBeInTheDocument();
       expect(screen.getByText("Apple Inc.")).toBeInTheDocument();
@@ -311,7 +311,7 @@ describe("SearchModal Component - Search & Results Flow", () => {
           }}
         >
           <SearchModal />
-        </SearchModalWrapper>
+        </SearchModalWrapper>,
       );
 
       expect(screen.getByText("No stocks found")).toBeInTheDocument();
@@ -345,11 +345,15 @@ describe("SearchModal Component - Search & Results Flow", () => {
           }}
         >
           <SearchModal />
-        </SearchModalWrapper>
+        </SearchModalWrapper>,
       );
 
       expect(screen.getByText("Search Error")).toBeInTheDocument();
-      expect(screen.getAllByText("API rate limit exceeded")).toHaveLength(2); // Form error + results error
+      expect(
+        screen.getAllByText(
+          "Too many requests. Please wait a moment and try again.",
+        ),
+      ).toHaveLength(2); // Form error + results error
     });
   });
 
@@ -379,7 +383,7 @@ describe("SearchModal Component - Search & Results Flow", () => {
           }}
         >
           <SearchModal />
-        </SearchModalWrapper>
+        </SearchModalWrapper>,
       );
 
       const appleStock = screen.getByText("Apple Inc.").closest("button");
