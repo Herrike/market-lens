@@ -13,7 +13,8 @@
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "test": "vitest --run",
     "postinstall": "if [ \"$NODE_ENV\" == \"development\" ]; then lefthook install; fi",
-    "deploy": "gh-pages -d dist"
+    "deploy": "pnpm build && gh-pages -d dist",
+    "deploy:ci": "gh-pages -d dist"
   },
   "dependencies": {
     "20": "link:@heroicons/react/20",

@@ -10,11 +10,7 @@ import {
 } from "./api";
 import type { Stock, ApiError } from "@/types/api";
 
-// Mock environment variables
-vi.mock("import.meta.env", () => ({
-  VITE_FMP_BASE_URL: "https://financialmodelingprep.com/api/v3",
-  VITE_FMP_API_KEY: "test-api-key",
-}));
+// Environment variables are mocked in test setup
 
 describe("API Service", () => {
   const mockConfig: ApiConfig = {
@@ -54,7 +50,7 @@ describe("API Service", () => {
       const url = buildApiUrl(mockConfig, "/stable/search-symbol");
 
       expect(url).toBe(
-        "https://test-api.com/v3/stable/search-symbol?apikey=test-key"
+        "https://test-api.com/v3/stable/search-symbol?apikey=test-key",
       );
     });
 
@@ -93,22 +89,22 @@ describe("API Service", () => {
 
     it("should throw error for empty queries", () => {
       expect(() => validateStockQuery("")).toThrow(
-        "Search query cannot be empty"
+        "Search query cannot be empty",
       );
       expect(() => validateStockQuery("   ")).toThrow(
-        "Search query cannot be empty"
+        "Search query cannot be empty",
       );
     });
 
     it("should throw error for invalid formats", () => {
       expect(() => validateStockQuery("invalid symbol with spaces")).toThrow(
-        "Invalid stock symbol format"
+        "Invalid stock symbol format",
       );
       expect(() => validateStockQuery("toolongstocksymbol")).toThrow(
-        "Invalid stock symbol format"
+        "Invalid stock symbol format",
       );
       expect(() => validateStockQuery("123@#$")).toThrow(
-        "Invalid stock symbol format"
+        "Invalid stock symbol format",
       );
     });
 
@@ -128,7 +124,7 @@ describe("API Service", () => {
 
       const result = await makeApiRequest<Stock[]>(
         "https://test.com",
-        mockFetch
+        mockFetch,
       );
 
       expect(mockFetch).toHaveBeenCalledWith("https://test.com");
@@ -143,7 +139,7 @@ describe("API Service", () => {
       });
 
       await expect(
-        makeApiRequest("https://test.com", mockFetch)
+        makeApiRequest("https://test.com", mockFetch),
       ).rejects.toThrow("HTTP 404: Not Found");
     });
 
@@ -151,7 +147,7 @@ describe("API Service", () => {
       const mockFetch = vi.fn().mockRejectedValue(new Error("Network error"));
 
       await expect(
-        makeApiRequest("https://test.com", mockFetch)
+        makeApiRequest("https://test.com", mockFetch),
       ).rejects.toMatchObject({
         name: "Error",
         message: "Network error",
@@ -165,7 +161,7 @@ describe("API Service", () => {
       });
 
       await expect(
-        makeApiRequest("https://test.com", mockFetch)
+        makeApiRequest("https://test.com", mockFetch),
       ).rejects.toMatchObject({
         name: "Error",
         message: "Invalid JSON",
@@ -196,7 +192,7 @@ describe("API Service", () => {
       const result = await searchStocks("aapl", 10, mockConfig, mockFetch);
 
       expect(mockFetch).toHaveBeenCalledWith(
-        "https://test-api.com/v3/stable/search-symbol?apikey=test-key&query=AAPL&limit=10"
+        "https://test-api.com/v3/stable/search-symbol?apikey=test-key&query=AAPL&limit=10",
       );
       expect(result).toEqual([mockStock]);
     });
@@ -210,7 +206,7 @@ describe("API Service", () => {
       await searchStocks("aapl", undefined, mockConfig, mockFetch);
 
       expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining("limit=10")
+        expect.stringContaining("limit=10"),
       );
     });
 
@@ -218,7 +214,7 @@ describe("API Service", () => {
       const mockFetch = vi.fn();
 
       await expect(searchStocks("", 10, mockConfig, mockFetch)).rejects.toThrow(
-        "Search query cannot be empty"
+        "Search query cannot be empty",
       );
 
       expect(mockFetch).not.toHaveBeenCalled();
@@ -266,7 +262,7 @@ describe("API Service", () => {
       await apiService.searchStocks("aapl");
 
       expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining("limit=10")
+        expect.stringContaining("limit=10"),
       );
 
       vi.unstubAllGlobals();
