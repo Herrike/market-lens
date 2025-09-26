@@ -101,8 +101,9 @@ The application is automatically deployed to GitHub Pages at:
 **API Key Security**: The Financial Modeling Prep API key is exposed in the client-side bundle, which is acceptable for this demo using the free tier but **not recommended for production**.
 
 **Production Recommendations**:
+
 - Use backend proxy servers to hide API keys
-- Implement serverless functions (Vercel, Netlify) 
+- Implement serverless functions (Vercel, Netlify)
 - Utilize cloud environment variables (Railway, Amplify)
 - Add user authentication and rate limiting
 
