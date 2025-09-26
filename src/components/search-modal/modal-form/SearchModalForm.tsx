@@ -8,13 +8,7 @@ const SearchModalForm = () => {
   const { searchQuery, setSearchQuery } = useContext(SearchContext);
 
   // Use SWR hook for API calls - only search when query is submitted
-  const { data, error, isLoading } = useStockSearch(searchQuery);
-
-  // Log results when data changes
-  console.log("Search results:", data);
-  if (error) {
-    console.error("Search error:", error);
-  }
+  const { data: _data, error, isLoading } = useStockSearch(searchQuery);
 
   // Base input styling - flat right border for unified appearance
   const baseInputClasses =
@@ -48,7 +42,7 @@ const SearchModalForm = () => {
         setSearchQuery(trimmedQuery);
       }
     },
-    [searchQuery, setSearchQuery]
+    [searchQuery, setSearchQuery],
   );
 
   return (
@@ -73,7 +67,7 @@ const SearchModalForm = () => {
             className={clsx(
               baseInputClasses,
               error && errorClasses,
-              isLoading && loadingClasses
+              isLoading && loadingClasses,
             )}
           />
           <button

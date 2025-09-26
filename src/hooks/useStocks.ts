@@ -5,7 +5,6 @@ import { apiService } from "@/services/api";
 import {
   hasValidCache,
   getCache,
-  getCacheMetadata,
   setCache,
   clearCache,
 } from "@/services/cache";
@@ -22,26 +21,6 @@ export function useStockSearch(query: string, limit: number = 10) {
   const cachedData = hasValidCacheData
     ? getCache<Stock[]>("stockSearch", cacheIdentifier)
     : null;
-
-  // Log cache status with timing info
-  if (shouldFetch && hasValidCacheData && cachedData) {
-    const cacheMetadata = getCacheMetadata("stockSearch", cacheIdentifier);
-    if (cacheMetadata) {
-      // Calculate age in hours (max 24h for our cache policy)
-      const ageHours = Math.floor(cacheMetadata.age / (1000 * 60 * 60));
-
-      // Format the cached date as DAY.MONTH.YEAR
-      const cachedDate = new Date(cacheMetadata.timestamp);
-      const day = cachedDate.getDate();
-      const month = cachedDate.getMonth() + 1; // Month is 0-indexed
-      const year = cachedDate.getFullYear();
-      const formattedDate = `${day}.${month}.${year}`;
-
-      console.log(
-        `🚀 Serving from CACHE for query: "${query}" (${cachedData.length} results) - Age: ${ageHours}h, From Date: ${formattedDate}`
-      );
-    }
-  }
 
   // Only use SWR if we don't have valid cached data
   const shouldUseSWR = shouldFetch && !hasValidCacheData;
@@ -61,7 +40,7 @@ export function useStockSearch(query: string, limit: number = 10) {
       setCache("stockSearch", cacheIdentifier, data);
 
       console.log(
-        `💾 Cached API response for query: "${query}" (${data.length} results, TTL: 24h)`
+        `💾 Cached API response for query: "${query}" (${data.length} results, TTL: 24h)`,
       );
 
       return data;
@@ -69,7 +48,7 @@ export function useStockSearch(query: string, limit: number = 10) {
     {
       ...cacheConfig.swr,
       // SWR configuration from our config file
-    }
+    },
   );
 
   // Return either cached data or SWR data
@@ -110,13 +89,13 @@ export function findStockInCache(symbol: string): Stock | null {
           if (!isExpired && Array.isArray(data)) {
             // Search for the symbol in this cached result set
             const foundStock = data.find(
-              (stock: Stock) => stock.symbol.toUpperCase() === normalizedSymbol
+              (stock: Stock) => stock.symbol.toUpperCase() === normalizedSymbol,
             );
 
             if (foundStock) {
               console.log(
                 `📦 Found ${symbol} details in cached search results:`,
-                foundStock
+                foundStock,
               );
               return foundStock;
             }

@@ -100,13 +100,11 @@ describe("Stock Detail Display Component", () => {
       render(
         <SectionWrapper contextValue={{ selectedStock: "" }}>
           <Section />
-        </SectionWrapper>
+        </SectionWrapper>,
       );
 
-      expect(screen.getByText("Market Lens")).toBeInTheDocument();
-      expect(
-        screen.getByText("Search for a stock to get started")
-      ).toBeInTheDocument();
+      expect(screen.getByTestId("app-title")).toBeInTheDocument();
+      expect(screen.getByTestId("app-description")).toBeInTheDocument();
       expect(screen.getByTestId("free-tier-suggestions")).toBeInTheDocument();
     });
 
@@ -114,11 +112,11 @@ describe("Stock Detail Display Component", () => {
       render(
         <SectionWrapper contextValue={{ selectedStock: "" }}>
           <Section />
-        </SectionWrapper>
+        </SectionWrapper>,
       );
 
       expect(
-        screen.queryByRole("button", { name: /back to home/i })
+        screen.queryByTestId("back-to-home-button"),
       ).not.toBeInTheDocument();
     });
 
@@ -131,7 +129,7 @@ describe("Stock Detail Display Component", () => {
           }}
         >
           <Section />
-        </SectionWrapper>
+        </SectionWrapper>,
       );
 
       expect(screen.getByTestId("search-modal")).toBeInTheDocument();
@@ -150,7 +148,7 @@ describe("Stock Detail Display Component", () => {
       render(
         <SectionWrapper contextValue={{ selectedStock: "AAPL" }}>
           <Section />
-        </SectionWrapper>
+        </SectionWrapper>,
       );
 
       // Check for loading skeleton elements
@@ -161,9 +159,7 @@ describe("Stock Detail Display Component", () => {
 
       // Should still show chart and back button even during loading
       expect(screen.getByTestId("stock-chart")).toBeInTheDocument();
-      expect(
-        screen.getByRole("button", { name: /back to home/i })
-      ).toBeInTheDocument();
+      expect(screen.getByTestId("back-to-home-button")).toBeInTheDocument();
     });
   });
 
@@ -179,30 +175,26 @@ describe("Stock Detail Display Component", () => {
       render(
         <SectionWrapper contextValue={{ selectedStock: "AAPL" }}>
           <Section />
-        </SectionWrapper>
+        </SectionWrapper>,
       );
 
       // Check stock name and symbol
-      expect(screen.getByText("Apple Inc.")).toBeInTheDocument();
-      expect(screen.getByText("AAPL")).toBeInTheDocument();
+      expect(screen.getByTestId("stock-name")).toBeInTheDocument();
+      expect(screen.getByTestId("stock-symbol")).toBeInTheDocument();
 
       // Check currency display
-      expect(screen.getByText(/USD/)).toBeInTheDocument();
+      expect(screen.getByTestId("stock-currency")).toBeInTheDocument();
 
       // Check exchange information
-      expect(screen.getByText("Exchange:")).toBeInTheDocument();
-      expect(
-        screen.getByText("NASDAQ Global Select Market")
-      ).toBeInTheDocument();
-      expect(screen.getByText("(NASDAQ)")).toBeInTheDocument();
+      expect(screen.getByTestId("stock-exchange")).toBeInTheDocument();
+      expect(screen.getByTestId("stock-exchange")).toBeInTheDocument();
+      expect(screen.getByTestId("stock-exchange-short")).toBeInTheDocument();
 
       // Check chart is displayed
       expect(screen.getByTestId("stock-chart")).toBeInTheDocument();
 
       // Check back button
-      expect(
-        screen.getByRole("button", { name: /back to home/i })
-      ).toBeInTheDocument();
+      expect(screen.getByTestId("back-to-home-button")).toBeInTheDocument();
     });
 
     it("should display stock with minimal information", async () => {
@@ -216,15 +208,15 @@ describe("Stock Detail Display Component", () => {
       render(
         <SectionWrapper contextValue={{ selectedStock: "TSLA" }}>
           <Section />
-        </SectionWrapper>
+        </SectionWrapper>,
       );
 
-      expect(screen.getByText("Tesla, Inc.")).toBeInTheDocument();
-      expect(screen.getByText("TSLA")).toBeInTheDocument();
-      expect(screen.getByText(/USD/)).toBeInTheDocument();
+      expect(screen.getByTestId("stock-name")).toBeInTheDocument();
+      expect(screen.getByTestId("stock-symbol")).toBeInTheDocument();
+      expect(screen.getByTestId("stock-currency")).toBeInTheDocument();
 
       // Should show exchange name as fallback when no exchangeFullName
-      expect(screen.getByText("NASDAQ")).toBeInTheDocument();
+      expect(screen.getByTestId("stock-exchange")).toBeInTheDocument();
     });
 
     it("should handle stock without currency", async () => {
@@ -243,11 +235,11 @@ describe("Stock Detail Display Component", () => {
       render(
         <SectionWrapper contextValue={{ selectedStock: "AAPL" }}>
           <Section />
-        </SectionWrapper>
+        </SectionWrapper>,
       );
 
-      expect(screen.getByText("Apple Inc.")).toBeInTheDocument();
-      expect(screen.getByText("AAPL")).toBeInTheDocument();
+      expect(screen.getByTestId("stock-name")).toBeInTheDocument();
+      expect(screen.getByTestId("stock-symbol")).toBeInTheDocument();
 
       // Currency should not be displayed
       expect(screen.queryByText(/USD/)).not.toBeInTheDocument();
@@ -259,12 +251,12 @@ describe("Stock Detail Display Component", () => {
       render(
         <SectionWrapper contextValue={{ selectedStock: "UNKNOWN" }}>
           <Section />
-        </SectionWrapper>
+        </SectionWrapper>,
       );
 
       // Should show the selected stock symbol as fallback (check heading specifically)
       expect(
-        screen.getByRole("heading", { name: "UNKNOWN" })
+        screen.getByRole("heading", { name: "UNKNOWN" }),
       ).toBeInTheDocument();
       expect(screen.getByText(/Selected Stock Symbol/)).toBeInTheDocument();
 
@@ -272,9 +264,7 @@ describe("Stock Detail Display Component", () => {
       expect(screen.getByTestId("stock-chart")).toBeInTheDocument();
 
       // Back button should be available
-      expect(
-        screen.getByRole("button", { name: /back to home/i })
-      ).toBeInTheDocument();
+      expect(screen.getByTestId("back-to-home-button")).toBeInTheDocument();
     });
   });
 
@@ -290,7 +280,7 @@ describe("Stock Detail Display Component", () => {
       render(
         <SectionWrapper contextValue={{ selectedStock: "AAPL" }}>
           <Section />
-        </SectionWrapper>
+        </SectionWrapper>,
       );
 
       expect(screen.getByTestId("stock-chart")).toBeInTheDocument();
@@ -307,7 +297,7 @@ describe("Stock Detail Display Component", () => {
       render(
         <SectionWrapper contextValue={{ selectedStock: "AAPL" }}>
           <Section />
-        </SectionWrapper>
+        </SectionWrapper>,
       );
 
       expect(screen.getByTestId("stock-chart")).toBeInTheDocument();
@@ -317,7 +307,7 @@ describe("Stock Detail Display Component", () => {
       render(
         <SectionWrapper contextValue={{ selectedStock: "" }}>
           <Section />
-        </SectionWrapper>
+        </SectionWrapper>,
       );
 
       expect(screen.queryByTestId("stock-chart")).not.toBeInTheDocument();
@@ -344,10 +334,10 @@ describe("Stock Detail Display Component", () => {
           }}
         >
           <Section />
-        </SectionWrapper>
+        </SectionWrapper>,
       );
 
-      const backButton = screen.getByRole("button", { name: /back to home/i });
+      const backButton = screen.getByTestId("back-to-home-button");
       await user.click(backButton);
 
       expect(setSelectedStock).toHaveBeenCalledWith("");
@@ -364,10 +354,10 @@ describe("Stock Detail Display Component", () => {
       render(
         <SectionWrapper contextValue={{ selectedStock: "AAPL" }}>
           <Section />
-        </SectionWrapper>
+        </SectionWrapper>,
       );
 
-      const backButton = screen.getByRole("button", { name: /back to home/i });
+      const backButton = screen.getByTestId("back-to-home-button");
       expect(backButton).toHaveClass("cursor-pointer");
       // Icon is rendered as actual SVG, not our mock
       expect(screen.getByText("Back to Home")).toBeInTheDocument();
@@ -393,20 +383,18 @@ describe("Stock Detail Display Component", () => {
       render(
         <SectionWrapper contextValue={{ selectedStock: "INVALID" }}>
           <Section />
-        </SectionWrapper>
+        </SectionWrapper>,
       );
 
       // Should show fallback with symbol when error occurs (check heading specifically)
       expect(
-        screen.getByRole("heading", { name: "INVALID" })
+        screen.getByRole("heading", { name: "INVALID" }),
       ).toBeInTheDocument();
       expect(screen.getByText(/Selected Stock Symbol/)).toBeInTheDocument();
 
       // Chart and back button should still be available
       expect(screen.getByTestId("stock-chart")).toBeInTheDocument();
-      expect(
-        screen.getByRole("button", { name: /back to home/i })
-      ).toBeInTheDocument();
+      expect(screen.getByTestId("back-to-home-button")).toBeInTheDocument();
     });
   });
 
@@ -422,7 +410,7 @@ describe("Stock Detail Display Component", () => {
       render(
         <SectionWrapper contextValue={{ selectedStock: "AAPL" }}>
           <Section />
-        </SectionWrapper>
+        </SectionWrapper>,
       );
 
       // Check for responsive container classes
@@ -434,7 +422,7 @@ describe("Stock Detail Display Component", () => {
         "max-w-7xl",
         "px-4",
         "sm:px-6",
-        "lg:px-8"
+        "lg:px-8",
       );
     });
   });
@@ -451,7 +439,7 @@ describe("Stock Detail Display Component", () => {
       render(
         <SectionWrapper contextValue={{ selectedStock: "AAPL" }}>
           <Section />
-        </SectionWrapper>
+        </SectionWrapper>,
       );
 
       // Main stock name should be a heading
@@ -471,10 +459,10 @@ describe("Stock Detail Display Component", () => {
       render(
         <SectionWrapper contextValue={{ selectedStock: "AAPL" }}>
           <Section />
-        </SectionWrapper>
+        </SectionWrapper>,
       );
 
-      const backButton = screen.getByRole("button", { name: /back to home/i });
+      const backButton = screen.getByTestId("back-to-home-button");
       // Button doesn't have explicit type attribute, but defaults to button
       expect(backButton.tagName).toBe("BUTTON");
     });

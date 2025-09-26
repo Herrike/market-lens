@@ -51,12 +51,9 @@ async function fetchHistoricalData(symbol: string): Promise<StockHistoryData> {
   if (hasCachedFailure(symbol)) {
     const failureData = getCache<{ error: string; timestamp: number }>(
       "stockHistory1Day",
-      `failed-${symbol}`
+      `failed-${symbol}`,
     );
     if (failureData) {
-      console.log(
-        `❌ Using cached failure for ${symbol}: ${failureData.error}`
-      );
       const error = new Error(failureData.error) as ApiError;
       error.name = "CachedFailure";
       error.retryable = false;
@@ -68,9 +65,6 @@ async function fetchHistoricalData(symbol: string): Promise<StockHistoryData> {
   if (hasValidCache("stockHistory1Day", symbol)) {
     const cachedData = getCache<StockHistoryData>("stockHistory1Day", symbol);
     if (cachedData) {
-      console.log(
-        `📦 Using cached data for ${symbol} (${cachedData.data.length} points)`
-      );
       return cachedData;
     }
   }
@@ -80,19 +74,12 @@ async function fetchHistoricalData(symbol: string): Promise<StockHistoryData> {
     throw new Error("API key is not configured");
   }
 
-  console.log(`🔍 Fetching historical data for ${symbol}...`);
-
   // Use the new historical-price-eod/light endpoint with 15-day lookback
   const fromDate = getFifteenDaysAgo();
   const toDate = getToday();
   const url = `https://financialmodelingprep.com/stable/historical-price-eod/light?symbol=${symbol}&from=${fromDate}&to=${toDate}&apikey=${API_KEY}`;
 
-  console.log(`📡 API URL: ${url.replace(API_KEY, "XXXXX")}`);
-  console.log(`📅 Date range: ${fromDate} to ${toDate}`);
-
   const response = await fetch(url);
-
-  console.log(`📈 Response status: ${response.status} ${response.statusText}`);
 
   if (!response.ok) {
     // Create specific error types to prevent retries on permanent failures
@@ -137,7 +124,7 @@ async function fetchHistoricalData(symbol: string): Promise<StockHistoryData> {
     } else if (response.status >= 500) {
       // 5xx Server errors - can retry these
       const error = new Error(
-        `${errorMessage} - Server error, will retry`
+        `${errorMessage} - Server error, will retry`,
       ) as ApiError;
       error.name = "ServerError";
       error.status = response.status;
@@ -155,11 +142,6 @@ async function fetchHistoricalData(symbol: string): Promise<StockHistoryData> {
 
   const data = await response.json();
 
-  console.log(
-    `📊 Raw API response sample:`,
-    Array.isArray(data) ? data.slice(0, 2) : data
-  );
-
   // Check for API error messages
   if (data.Error && data.Error.Message) {
     throw new Error(data.Error.Message);
@@ -171,7 +153,6 @@ async function fetchHistoricalData(symbol: string): Promise<StockHistoryData> {
 
   // The historical-price-eod endpoint returns a direct array
   if (!Array.isArray(data)) {
-    console.error("Unexpected API response format:", data);
     throw new Error("No historical data found in API response");
   }
 
@@ -187,15 +168,13 @@ async function fetchHistoricalData(symbol: string): Promise<StockHistoryData> {
       date: item.date,
       price: item.price,
       volume: item.volume || 0,
-    })
+    }),
   );
 
   const result: StockHistoryData = {
     data: historicalData,
     symbol: symbol,
   };
-
-  console.log(`✅ Processed ${result.data.length} data points for ${symbol}`);
 
   // Cache successful response
   setCache("stockHistory1Day", symbol, result);
@@ -211,7 +190,7 @@ export function useStockHistory(symbol: string) {
   const shouldFetch = Boolean(
     symbol &&
       symbol.length > 0 &&
-      !permanentlyFailedStocks.has(symbol.toLowerCase())
+      !permanentlyFailedStocks.has(symbol.toLowerCase()),
   );
 
   const { data, error, isLoading, mutate } = useSWR<StockHistoryData, ApiError>(
@@ -223,40 +202,29 @@ export function useStockHistory(symbol: string) {
       dedupingInterval: 10 * 60 * 1000, // 10 minutes - longer deduping
       errorRetryInterval: 15000, // Wait longer between retries
       onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
-        console.log(`🔄 SWR retry attempt ${retryCount} for ${symbol}`);
-
         // Never retry if error is marked as non-retryable
         if (error.retryable === false) {
-          console.log(
-            `❌ Not retrying ${symbol} - error is not retryable:`,
-            error.message
-          );
           permanentlyFailedStocks.add(symbol.toLowerCase());
           return;
         }
 
         // Don't retry for specific status codes - mark as permanently failed
         if (error.status && [401, 402, 403, 404].includes(error.status)) {
-          console.log(
-            `❌ Not retrying ${symbol} - permanent error ${error.status}`
-          );
           permanentlyFailedStocks.add(symbol.toLowerCase());
           return;
         }
 
         // Only retry up to 2 times for server errors
         if (retryCount >= 2) {
-          console.log(`❌ Max retries reached for ${symbol}`);
           return;
         }
 
         // Only retry 5xx errors
         if (error.status && error.status >= 500) {
-          console.log(`🔄 Retrying ${symbol} - server error ${error.status}`);
           setTimeout(() => revalidate({ retryCount }), 5000);
         }
       },
-    }
+    },
   );
 
   return {

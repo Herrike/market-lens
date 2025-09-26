@@ -12,8 +12,6 @@ const SearchResultItem = ({ stock }: SearchResultItemProps) => {
     useContext(SearchContext);
 
   const handleClick = useCallback(() => {
-    console.log("Selected stock:", stock);
-    console.log("Setting selected stock symbol:", stock.symbol);
     // Save selected stock symbol to context
     setSelectedStock(stock.symbol);
     // Close the modal

@@ -12,22 +12,31 @@ const Navigation = () => {
   // both search input focus and enter button click should open the search modal
   const searchModalHandler = useCallback(
     (
-      e: React.MouseEvent<HTMLInputElement> | React.FocusEvent<HTMLInputElement>
+      e:
+        | React.MouseEvent<HTMLInputElement>
+        | React.FocusEvent<HTMLInputElement>,
     ) => {
       e.preventDefault();
       // beware! this function triggers the search modal
 
       setSearchModalToggle(true);
     },
-    [setSearchModalToggle]
+    [setSearchModalToggle],
   );
 
   return (
-    <div className="fixed top-0 left-0 right-0 lg:left-72 z-40 sm:px-4 lg:px-8 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-      <div className="flex h-16 items-center gap-x-4 px-4 sm:gap-x-6 ">
+    <div
+      className="fixed top-0 left-0 right-0 lg:left-72 z-40 sm:px-4 lg:px-8 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700"
+      data-testid="navigation-container"
+    >
+      <div
+        className="flex h-16 items-center gap-x-4 px-4 sm:gap-x-6 "
+        data-testid="navigation-content"
+      >
         {/* Mobile menu button */}
         <button
           type="button"
+          data-testid="mobile-menu-button"
           onClick={() => !sidebarOpen && setSidebarOpen(true)}
           className="-m-2.5 p-2.5 text-gray-700 hover:text-gray-900 lg:hidden dark:text-gray-400 dark:hover:text-white cursor-pointer"
         >
@@ -39,11 +48,18 @@ const Navigation = () => {
         <div
           aria-hidden="true"
           className="h-6 w-px bg-gray-200 lg:hidden dark:bg-gray-700"
+          data-testid="mobile-separator"
         />
 
-        <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
+        <div
+          className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6"
+          data-testid="search-container"
+        >
           {/* Search bar: this is a fake form */}
-          <div className="flex flex-1 items-center bg-white dark:bg-gray-900 rounded-md px-3">
+          <div
+            className="flex flex-1 items-center bg-white dark:bg-gray-900 rounded-md px-3"
+            data-testid="search-bar"
+          >
             <MagnifyingGlassIcon
               aria-hidden="true"
               className="size-5 text-gray-400 flex-shrink-0"
@@ -52,11 +68,13 @@ const Navigation = () => {
               name="search"
               placeholder="Search"
               aria-label="Search"
+              data-testid="search-input"
               className="flex-1 bg-transparent px-3 py-2 text-base text-gray-900 outline-none placeholder:text-gray-400 sm:text-sm/6 dark:text-white dark:placeholder:text-gray-500"
               onMouseDownCapture={searchModalHandler}
             />
             <button
               type="submit"
+              data-testid="search-submit-button"
               className="flex-shrink-0 p-1 hover:bg-gray-100 rounded dark:hover:bg-gray-800"
               aria-label="Submit search"
               disabled
