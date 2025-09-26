@@ -225,6 +225,9 @@ const StockChart = () => {
     : selectedStock;
 
   const options: Highcharts.Options = {
+    accessibility: {
+      enabled: false, // Disable accessibility module to remove warning
+    },
     title: {
       text: `${displayName} Price History`,
       style: {
