@@ -1,6 +1,8 @@
-# Market Lens - Stock Market Application
+# Market Lens 📈
 
-A React application built with TypeScript and Vite that provides stock market data visualization using the Financial Modeling Prep API.
+> **Live Demo: [https://herrike.github.io/market-lens/](https://herrike.github.io/market-lens/)**
+
+A modern React 19 application for stock market analysis with real-time data visualization and comprehensive search capabilities.
 
 ## Project Requirements
 
