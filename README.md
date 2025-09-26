@@ -54,8 +54,42 @@ What we'd like from you:
 
 ## Technologies Used
 
-- React 18
-- TypeScript
-- Vite
-- Financial Modeling Prep API
-- Highcharts (for price charts)
+- **React 19** - Latest React with improved performance and features
+- **TypeScript** - Type-safe development with full IDE support
+- **Vite** - Fast development build tool with HMR
+- **Tailwind CSS** - Utility-first styling framework
+- **HeadlessUI** - Accessible UI components for React
+- **Financial Modeling Prep API** - Real-time stock market data
+- **Highcharts** - Interactive price charts and data visualization
+- **Vitest** - Fast unit testing with 92 test coverage
+- **GitHub Pages** - Automated deployment and hosting
+
+## Key Features
+
+✅ **Comprehensive Stock Search** - Find stocks by symbol or company name  
+✅ **Real-time Price Charts** - Interactive Highcharts with historical data  
+✅ **Responsive Design** - Mobile-first approach with Tailwind CSS  
+✅ **Type Safety** - Full TypeScript implementation  
+✅ **Robust Testing** - 92 tests with data-testid reliability strategy  
+✅ **Performance Optimized** - React 19 with efficient caching and lazy loading  
+✅ **Accessible UI** - WCAG compliant with HeadlessUI components
+
+## Deployment
+
+The application is automatically deployed to GitHub Pages at:
+**[https://herrike.github.io/market-lens/](https://herrike.github.io/market-lens/)**
+
+### Local Development
+
+1. Clone the repository
+2. Install dependencies: `pnpm install`
+3. Start dev server: `pnpm dev`
+4. Run tests: `pnpm test`
+5. Build for production: `pnpm build`
+
+## Testing Strategy
+
+- **92 comprehensive tests** covering all user flows
+- **Data-testid approach** for reliable, maintainable tests
+- **Vitest framework** for fast test execution
+- **Component isolation** testing for better reliability
