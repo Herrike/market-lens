@@ -98,13 +98,18 @@ The application is automatically deployed to GitHub Pages at:
 
 ⚠️ **Important Note**: This is a **demonstration project** for portfolio purposes.
 
-**API Key Security**: The Financial Modeling Prep API key is exposed in the client-side bundle, which is acceptable for this demo using the free tier but **not recommended for production**.
+**API Key Security**: The Financial Modeling Prep API key is **securely managed through GitHub Secrets** during deployment. The live demo uses environment variables that are injected at build time, keeping the API key secure and not exposed in the client-side bundle.
 
-**Production Recommendations**:
+**Security Implementation**:
 
-- Use backend proxy servers to hide API keys
-- Implement serverless functions (Vercel, Netlify)
-- Utilize cloud environment variables (Railway, Amplify)
-- Add user authentication and rate limiting
+- ✅ **GitHub Secrets**: API key stored securely in repository secrets (`VITE_FMP_API_KEY`)
+- ✅ **Build-time injection**: Environment variables injected during GitHub Actions deployment
+- ✅ **No client exposure**: API key not visible in production bundle or browser developer tools
+- ✅ **Fallback handling**: Graceful degradation with demo key for local development
 
-See [ADR-003](./docs/adr/003-api-key-security-considerations.md) for detailed security architecture decisions and production-ready alternatives.
+**Additional Production Recommendations**:
+
+- Use backend proxy servers for additional API key protection
+- Implement rate limiting and user authentication
+- Add request validation and sanitization
+- Monitor API usage and implement alerting
