@@ -1,4 +1,4 @@
-import type { ApiError } from "@/types/api";
+import type { ApiError } from "@/types/api.types";
 import { shouldRetryError, isPermanentError } from "./stock-api-errors";
 
 /**

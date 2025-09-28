@@ -19,8 +19,10 @@ describe("API Error Utility", () => {
       expect(result).toEqual({
         code: 400,
         message: "Bad Request",
+        name: "BadRequestError",
+        status: 400,
         userMessage: "Invalid request. Please check your input and try again.",
-        isRetryable: false,
+        retryable: false,
         suggestion:
           "Verify that you've entered a valid stock symbol (e.g., AAPL, MSFT).",
       });
@@ -33,7 +35,7 @@ describe("API Error Utility", () => {
       expect(result.userMessage).toBe(
         "Authentication required. Please check your API credentials.",
       );
-      expect(result.isRetryable).toBe(false);
+      expect(result.retryable).toBe(false);
       expect(result.suggestion).toContain("API key");
     });
 
@@ -44,7 +46,7 @@ describe("API Error Utility", () => {
       expect(result.userMessage).toBe(
         "Access denied. Please check your permissions or try again later.",
       );
-      expect(result.isRetryable).toBe(true);
+      expect(result.retryable).toBe(true);
       expect(result.suggestion).toContain("API quota");
     });
 
@@ -53,7 +55,7 @@ describe("API Error Utility", () => {
 
       expect(result.code).toBe(404);
       expect(result.userMessage).toBe("The requested data was not found.");
-      expect(result.isRetryable).toBe(false);
+      expect(result.retryable).toBe(false);
       expect(result.suggestion).toContain("stock symbol");
     });
 
@@ -64,7 +66,7 @@ describe("API Error Utility", () => {
       expect(result.userMessage).toBe(
         "Too many requests. Please wait a moment and try again.",
       );
-      expect(result.isRetryable).toBe(true);
+      expect(result.retryable).toBe(true);
       expect(result.suggestion).toContain("30-60 seconds");
     });
 
@@ -75,7 +77,7 @@ describe("API Error Utility", () => {
       expect(result.userMessage).toBe(
         "Server error occurred. Please try again later.",
       );
-      expect(result.isRetryable).toBe(true);
+      expect(result.retryable).toBe(true);
       expect(result.suggestion).toContain("temporary server issue");
     });
 
@@ -86,7 +88,7 @@ describe("API Error Utility", () => {
       expect(result.userMessage).toBe(
         "Service temporarily unavailable. Please try again later.",
       );
-      expect(result.isRetryable).toBe(true);
+      expect(result.retryable).toBe(true);
     });
 
     it("should return correct error message for 503 Service Unavailable", () => {
@@ -96,7 +98,7 @@ describe("API Error Utility", () => {
       expect(result.userMessage).toBe(
         "Service unavailable. Please try again later.",
       );
-      expect(result.isRetryable).toBe(true);
+      expect(result.retryable).toBe(true);
       expect(result.suggestion).toContain("maintenance");
     });
 
@@ -105,7 +107,7 @@ describe("API Error Utility", () => {
 
       expect(result.code).toBe(504);
       expect(result.userMessage).toBe("Request timeout. Please try again.");
-      expect(result.isRetryable).toBe(true);
+      expect(result.retryable).toBe(true);
       expect(result.suggestion).toContain("timed out");
     });
 
@@ -116,7 +118,7 @@ describe("API Error Utility", () => {
       expect(result.userMessage).toBe(
         "An unexpected error occurred. Please try again.",
       );
-      expect(result.isRetryable).toBe(false);
+      expect(result.retryable).toBe(false);
       expect(result.suggestion).toContain("refresh the page");
     });
 
@@ -127,7 +129,7 @@ describe("API Error Utility", () => {
       expect(result.userMessage).toBe(
         "Server error occurred. Please try again later.",
       );
-      expect(result.isRetryable).toBe(true);
+      expect(result.retryable).toBe(true);
       expect(result.suggestion).toContain("server issue");
     });
 
@@ -164,7 +166,7 @@ describe("API Error Utility", () => {
     });
   });
 
-  describe("isRetryableError", () => {
+  describe("retryableError", () => {
     it("should return true for retryable error codes", () => {
       const retryableCodes = [403, 429, 500, 502, 503, 504];
 
@@ -283,7 +285,7 @@ describe("API Error Utility", () => {
 
       expect(result.code).toBe(403);
       expect(result.userMessage).toContain("Access denied");
-      expect(result.isRetryable).toBe(true);
+      expect(result.retryable).toBe(true);
     });
 
     it("should handle objects with statusCode property", () => {
@@ -292,7 +294,7 @@ describe("API Error Utility", () => {
 
       expect(result.code).toBe(429);
       expect(result.userMessage).toContain("Too many requests");
-      expect(result.isRetryable).toBe(true);
+      expect(result.retryable).toBe(true);
     });
 
     it("should handle objects with code property", () => {
@@ -301,7 +303,7 @@ describe("API Error Utility", () => {
 
       expect(result.code).toBe(404);
       expect(result.userMessage).toContain("not found");
-      expect(result.isRetryable).toBe(false);
+      expect(result.retryable).toBe(false);
     });
 
     it("should use string error as message", () => {
@@ -344,7 +346,7 @@ describe("API Error Utility", () => {
       const result = handleApiError(complexError);
 
       expect(result.code).toBe(500); // Falls back to 500 since status is 0
-      expect(result.isRetryable).toBe(true);
+      expect(result.retryable).toBe(true);
     });
   });
 
@@ -361,21 +363,21 @@ describe("API Error Utility", () => {
       const result = getApiErrorMessage(99999);
 
       expect(result.code).toBe(99999);
-      expect(result.isRetryable).toBe(true); // Large codes >= 500 are treated as server errors
+      expect(result.retryable).toBe(true); // Large codes >= 500 are treated as server errors
     });
 
     it("should handle negative status codes", () => {
       const result = getApiErrorMessage(-1);
 
       expect(result.code).toBe(-1);
-      expect(result.isRetryable).toBe(false);
+      expect(result.retryable).toBe(false);
     });
 
     it("should handle zero status code", () => {
       const result = getApiErrorMessage(0);
 
       expect(result.code).toBe(0);
-      expect(result.isRetryable).toBe(false);
+      expect(result.retryable).toBe(false);
     });
   });
 
@@ -387,13 +389,13 @@ describe("API Error Utility", () => {
       expect(result).toHaveProperty("code");
       expect(result).toHaveProperty("message");
       expect(result).toHaveProperty("userMessage");
-      expect(result).toHaveProperty("isRetryable");
+      expect(result).toHaveProperty("retryable");
 
       // Check types
       expect(typeof result.code).toBe("number");
       expect(typeof result.message).toBe("string");
       expect(typeof result.userMessage).toBe("string");
-      expect(typeof result.isRetryable).toBe("boolean");
+      expect(typeof result.retryable).toBe("boolean");
 
       // Optional property
       if (result.suggestion) {
@@ -410,11 +412,11 @@ describe("API Error Utility", () => {
         expect(result).toHaveProperty("code");
         expect(result).toHaveProperty("message");
         expect(result).toHaveProperty("userMessage");
-        expect(result).toHaveProperty("isRetryable");
+        expect(result).toHaveProperty("retryable");
         expect(typeof result.code).toBe("number");
         expect(typeof result.message).toBe("string");
         expect(typeof result.userMessage).toBe("string");
-        expect(typeof result.isRetryable).toBe("boolean");
+        expect(typeof result.retryable).toBe("boolean");
       });
     });
   });

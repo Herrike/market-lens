@@ -8,7 +8,7 @@ import {
   apiService,
   type ApiConfig,
 } from "./api";
-import type { Stock, ApiError } from "@/types/api";
+import type { Stock, ApiError } from "@/types/api.types";
 
 // Environment variables are mocked in test setup
 

@@ -1,4 +1,4 @@
-import type { ApiError } from "@/types/api";
+import type { ApiError } from "@/types/api.types";
 import { cacheFailure } from "./stock-quote-cache";
 import type { cacheConfig } from "@/config/cache";
 

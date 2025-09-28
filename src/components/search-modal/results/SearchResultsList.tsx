@@ -1,5 +1,5 @@
-import type { Stock } from "@/types/api";
-import type { ApiError } from "@/types/api";
+import type { Stock } from "@/types/api.types";
+import type { ApiError } from "@/types/api.types";
 import { handleApiError, getErrorSuggestion } from "@/utils/api-errors";
 import SearchResultItem from "./SearchResultItem";
 

@@ -5,7 +5,7 @@ import {
   shouldRetryError,
 } from "./stock-api-errors";
 import * as stockQuoteCache from "./stock-quote-cache";
-import type { ApiError } from "@/types/api";
+import type { ApiError } from "@/types/api.types";
 
 // Mock the stock-quote-cache module
 vi.mock("./stock-quote-cache", () => ({

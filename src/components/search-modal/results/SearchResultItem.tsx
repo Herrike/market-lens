@@ -1,5 +1,5 @@
 import { useCallback, useContext } from "react";
-import type { Stock } from "@/types/api";
+import type { Stock } from "@/types/api.types";
 import SearchContext from "@/contexts/SearchContext";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 

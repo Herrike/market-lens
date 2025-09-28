@@ -1,6 +1,6 @@
 import useSWR from "swr";
-import type { ApiError } from "@/types/api";
-import type { Stock } from "@/types/api";
+import type { ApiError } from "@/types/api.types";
+import type { Stock } from "@/types/api.types";
 import { apiService } from "@/services/api";
 import {
   hasValidCache,

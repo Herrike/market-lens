@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import type { ApiError } from "@/types/api";
+import type { ApiError } from "@/types/api.types";
 import {
   hasCachedFailure,
   getCachedFailure,

@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import React from "react";
@@ -87,15 +87,17 @@ describe("SearchModal Component - Search & Results Flow", () => {
   });
 
   describe("Modal Rendering and Visibility", () => {
-    it("should render when modal is open", () => {
+    it("should render when modal is open", async () => {
       render(
         <SearchModalWrapper contextValue={{ searchModalToggle: true }}>
           <SearchModal />
         </SearchModalWrapper>,
       );
 
-      expect(screen.getByRole("dialog")).toBeInTheDocument();
-      expect(screen.getByText("Lens on Stocks")).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByRole("dialog")).toBeInTheDocument();
+        expect(screen.getByText("Lens on Stocks")).toBeInTheDocument();
+      });
     });
 
     it("should not render when modal is closed", () => {
@@ -108,19 +110,21 @@ describe("SearchModal Component - Search & Results Flow", () => {
       expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     });
 
-    it("should render search form", () => {
+    it("should render search form", async () => {
       render(
         <SearchModalWrapper contextValue={{ searchModalToggle: true }}>
           <SearchModal />
         </SearchModalWrapper>,
       );
 
-      expect(
-        screen.getByLabelText(/search a stock by their code/i),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByPlaceholderText("Enter stock symbol (e.g., AAPL)"),
-      ).toBeInTheDocument();
+      await waitFor(() => {
+        expect(
+          screen.getByLabelText(/search a stock by their code/i),
+        ).toBeInTheDocument();
+        expect(
+          screen.getByPlaceholderText("Enter stock symbol (e.g., AAPL)"),
+        ).toBeInTheDocument();
+      });
     });
   });
 
@@ -223,7 +227,9 @@ describe("SearchModal Component - Search & Results Flow", () => {
         </SearchModalWrapper>,
       );
 
-      expect(screen.getByText('Searching for "AAPL"...')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText('Searching for "AAPL"...')).toBeInTheDocument();
+      });
     });
 
     it("should disable form during loading", async () => {
@@ -248,15 +254,17 @@ describe("SearchModal Component - Search & Results Flow", () => {
         </SearchModalWrapper>,
       );
 
-      const searchInput = screen.getByPlaceholderText(
-        "Enter stock symbol (e.g., AAPL)",
-      );
-      const searchButton = screen.getByRole("button", {
-        name: /searching.../i,
-      });
+      await waitFor(() => {
+        const searchInput = screen.getByPlaceholderText(
+          "Enter stock symbol (e.g., AAPL)",
+        );
+        const searchButton = screen.getByRole("button", {
+          name: /searching.../i,
+        });
 
-      expect(searchInput).toBeDisabled();
-      expect(searchButton).toBeDisabled();
+        expect(searchInput).toBeDisabled();
+        expect(searchButton).toBeDisabled();
+      });
     });
   });
 
@@ -283,13 +291,15 @@ describe("SearchModal Component - Search & Results Flow", () => {
         </SearchModalWrapper>,
       );
 
-      expect(
-        screen.getByText('2 results found for "AAPL"'),
-      ).toBeInTheDocument();
-      expect(screen.getByText("AAPL")).toBeInTheDocument();
-      expect(screen.getByText("Apple Inc.")).toBeInTheDocument();
-      expect(screen.getByText("MSFT")).toBeInTheDocument();
-      expect(screen.getByText("Microsoft Corporation")).toBeInTheDocument();
+      await waitFor(() => {
+        expect(
+          screen.getByText('2 results found for "AAPL"'),
+        ).toBeInTheDocument();
+        expect(screen.getByText("AAPL")).toBeInTheDocument();
+        expect(screen.getByText("Apple Inc.")).toBeInTheDocument();
+        expect(screen.getByText("MSFT")).toBeInTheDocument();
+        expect(screen.getByText("Microsoft Corporation")).toBeInTheDocument();
+      });
     });
 
     it("should show no results message when no stocks found", async () => {
@@ -314,8 +324,12 @@ describe("SearchModal Component - Search & Results Flow", () => {
         </SearchModalWrapper>,
       );
 
-      expect(screen.getByText("No stocks found")).toBeInTheDocument();
-      expect(screen.getByText(/No results for "INVALID"/)).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText("No stocks found")).toBeInTheDocument();
+        expect(
+          screen.getByText(/No results for "INVALID"/),
+        ).toBeInTheDocument();
+      });
     });
   });
 
@@ -348,12 +362,14 @@ describe("SearchModal Component - Search & Results Flow", () => {
         </SearchModalWrapper>,
       );
 
-      expect(screen.getByText("Search Error")).toBeInTheDocument();
-      expect(
-        screen.getAllByText(
-          "Too many requests. Please wait a moment and try again.",
-        ),
-      ).toHaveLength(2); // Form error + results error
+      await waitFor(() => {
+        expect(screen.getByText("Search Error")).toBeInTheDocument();
+        expect(
+          screen.getAllByText(
+            "Too many requests. Please wait a moment and try again.",
+          ),
+        ).toHaveLength(2); // Form error + results error
+      });
     });
   });
 

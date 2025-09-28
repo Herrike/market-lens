@@ -1,4 +1,4 @@
-import type { ApiError, Stock } from "@/types/api";
+import type { ApiError, Stock } from "@/types/api.types";
 
 // API Configuration
 export interface ApiConfig {
@@ -16,7 +16,7 @@ export const getDefaultConfig = (): ApiConfig => ({
 export function buildApiUrl(
   config: ApiConfig,
   endpoint: string,
-  params?: Record<string, string | number>
+  params?: Record<string, string | number>,
 ): string {
   const url = new URL(`${config.baseUrl}${endpoint}`);
 
@@ -51,7 +51,7 @@ export function validateStockQuery(query: string): string {
 // Generic HTTP request function - easily mockable for tests
 export async function makeApiRequest<T>(
   url: string,
-  fetchFn: typeof fetch = fetch
+  fetchFn: typeof fetch = fetch,
 ): Promise<T> {
   try {
     const response = await fetchFn(url);
@@ -80,7 +80,7 @@ export async function searchStocks(
   query: string,
   limit: number = 10,
   config: ApiConfig = getDefaultConfig(),
-  fetchFn: typeof fetch = fetch
+  fetchFn: typeof fetch = fetch,
 ): Promise<Stock[]> {
   const cleanQuery = validateStockQuery(query);
   const url = buildApiUrl(config, "/stable/search-symbol", {
