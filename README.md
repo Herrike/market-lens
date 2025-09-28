@@ -61,7 +61,7 @@ What we'd like from you:
 - **HeadlessUI** - Accessible UI components for React
 - **Financial Modeling Prep API** - Real-time stock market data
 - **Highcharts** - Interactive price charts and data visualization
-- **Vitest** - Fast unit testing with 92 test coverage
+- **Vitest** - Fast unit testing with 207 test coverage
 - **GitHub Pages** - Automated deployment and hosting
 
 ## Key Features
@@ -70,7 +70,7 @@ What we'd like from you:
 ✅ **Real-time Price Charts** - Interactive Highcharts with historical data  
 ✅ **Responsive Design** - Mobile-first approach with Tailwind CSS  
 ✅ **Type Safety** - Full TypeScript implementation  
-✅ **Robust Testing** - 92 tests with data-testid reliability strategy  
+✅ **Robust Testing** - 207 tests with data-testid reliability strategy  
 ✅ **Performance Optimized** - React 19 with efficient caching and lazy loading  
 ✅ **Accessible UI** - WCAG compliant with HeadlessUI components
 
@@ -89,7 +89,7 @@ The application is automatically deployed to GitHub Pages at:
 
 ## Testing Strategy
 
-- **92 comprehensive tests** covering all user flows
+- **207 comprehensive tests** covering all user flows
 - **Data-testid approach** for reliable, maintainable tests
 - **Vitest framework** for fast test execution
 - **Component isolation** testing for better reliability
