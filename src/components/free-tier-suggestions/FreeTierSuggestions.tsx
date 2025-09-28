@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import SearchContext from "@/contexts/SearchContext";
-import { FREE_TIER_SYMBOLS, SYMBOL_NAMES } from "@/utils/freeTierSymbols";
+import { FREE_TIER_SYMBOLS, SYMBOL_NAMES } from "@/utils/free-tier-symbols";
 
 const FreeTierSuggestions = () => {
   const { setSelectedStock } = useContext(SearchContext);

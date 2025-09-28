@@ -29,7 +29,7 @@ export const SYMBOL_NAMES: Record<string, string> = {
  */
 export function isFreeTierSymbol(symbol: string): boolean {
   return FREE_TIER_SYMBOLS.includes(
-    symbol as (typeof FREE_TIER_SYMBOLS)[number]
+    symbol as (typeof FREE_TIER_SYMBOLS)[number],
   );
 }
 
