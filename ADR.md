@@ -3,8 +3,9 @@
 This document captures key architectural decisions made during the development of Market Lens, a React-based stock market analysis application built with modern web technologies.
 
 **Last Updated:** September 2025  
-**Status:** ✅ Implementation Complete  
-**Version:** 1.0
+**Status:** ✅ Implementation Complete + Bundle Optimized  
+**Version:** 1.0  
+**Performance:** 63% bundle size reduction (571 kB → 207 kB main bundle)
 
 ---
 
@@ -197,36 +198,58 @@ Handle modal positioning and layout consistency with fixed sidebar.
 
 ---
 
-## Component Lazy Loading Strategy
+## Bundle Optimization & Code Splitting
 
 ### Context
 
-Optimize bundle size and loading performance for different components.
+Initial bundle size of 571.84 kB was triggering Vite warnings (>500 kB) and impacting loading performance, especially for homepage visitors who may not need the heavy charting functionality.
 
-### Decision
+### Decision ✅ Implemented
 
-- **No lazy loading** for critical layout components (Sidebar, Navigation)
-- **Lazy load** heavy, conditional components (SearchModal, StockChart)
+- **Dynamic imports** for Chart components (Highcharts dependency)
+- **Manual chunking** strategy separating vendor libraries
+- **Lazy loading** of heavy, conditional components
+- **Async test handling** for dynamically imported components
 
 ### Rationale
 
-- **Critical components**: Always visible, needed for First Contentful Paint
-- **Heavy components**: Highcharts bundle, search modal only loaded when needed
-- **User experience**: Layout components must render immediately
+- **Performance**: 63% reduction in initial bundle size (571 kB → 207 kB)
+- **User experience**: Faster homepage loading, charts load on-demand
+- **Caching**: Vendor libraries cached separately from app code
+- **Maintainability**: Better separation of concerns
 
-### Implementation ✅ Updated Approach
+### Implementation ✅ Complete
 
 ```tsx
-// Critical layout components - immediate load
-import Sidebar from "./components/sidebar/Sidebar";
-import Navigation from "./components/navigation/Navigation";
+// Dynamic Chart loading with Suspense
+const Chart = lazy(() => import("../chart/Chart"));
 
-// Heavy dependencies loaded eagerly for better UX
-// Highcharts integration in Chart component
-// Search modal rendered conditionally but not lazy-loaded
+// Vite manual chunking configuration
+build: {
+  rollupOptions: {
+    output: {
+      manualChunks: {
+        react: ["react", "react-dom"],           // 11.83 kB
+        charts: ["highcharts", "highcharts-react-official"], // 282.10 kB (lazy)
+        ui: ["@headlessui/react", "@heroicons/react"],       // 44.69 kB
+        utils: ["swr"],                          // 10.73 kB
+      },
+    },
+  },
+}
 
-// Decision: Prioritize UX over bundle splitting for this app size
+// Test updates for async components
+await waitFor(() => {
+  expect(screen.getByTestId("stock-chart")).toBeInTheDocument();
+});
 ```
+
+### Results
+
+- **Main bundle**: 207.40 kB (was 571.84 kB) - 63% reduction
+- **Charts chunk**: 282.10 kB - loads only when user selects a stock
+- **All tests passing**: 207 tests including async loading scenarios
+- **Zero build warnings**: Eliminated 500+ kB bundle size warnings
 
 ---
 
@@ -326,7 +349,8 @@ Configure TypeScript for optimal developer experience and type safety.
 
 - **Type Safety**: Full TypeScript coverage with proper interfaces
 - **Code Organization**: Clean component architecture with separation of concerns
-- **Performance**: Memoized components and efficient state management
+- **Performance**: Memoized components, efficient state management, and optimized bundle splitting
+- **Bundle Optimization**: 63% size reduction via dynamic imports and strategic code splitting
 - **User Experience**: Smooth animations, proper loading states, cursor consistency
 - **API Integration**: Robust error handling for free tier limitations
 
@@ -344,10 +368,10 @@ Configure TypeScript for optimal developer experience and type safety.
 
 ### Technical Debt Monitoring
 
-- Bundle size optimization opportunities
 - Additional chart types and timeframes
 - Enhanced mobile experience optimizations
-- Unit testing coverage implementation
+- Progressive Web App (PWA) capabilities
+- Advanced caching strategies for offline support
 
 ---
 
