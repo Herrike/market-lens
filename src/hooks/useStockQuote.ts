@@ -7,7 +7,10 @@ import {
   getCachedSuccess,
   cacheSuccess,
 } from "@/utils/stock-quote-cache";
-import { handleHttpError } from "@/utils/stock-api-errors";
+import {
+  handleHttpError,
+  createCachedFailureError,
+} from "@/utils/stock-api-errors";
 import {
   transformQuoteResponse,
   type StockQuote,
@@ -34,10 +37,7 @@ async function fetchStockQuote(symbol: string): Promise<StockQuoteData> {
       console.log(
         `❌ Using cached failure for quote ${symbol}: ${failureData.error}`,
       );
-      const error = new Error(failureData.error) as ApiError;
-      error.name = "CachedFailure";
-      error.retryable = false;
-      throw error;
+      throw createCachedFailureError(failureData.error);
     }
   }
 

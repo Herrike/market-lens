@@ -9,7 +9,7 @@ export const FREE_TIER_SYMBOLS = [
   "^HSI", // Hang Seng Index
   "^STOXX50E", // Euro Stoxx 50
   "^VIX", // CBOE Volatility Index
-] as const;
+];
 
 // Symbol display names for better UX
 export const SYMBOL_NAMES: Record<string, string> = {

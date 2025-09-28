@@ -13,11 +13,21 @@ function createApiError(
   status: number,
   retryable: boolean = false,
 ): ApiError {
-  const error = new Error(message) as ApiError;
-  error.name = name;
-  error.status = status;
-  error.retryable = retryable;
-  return error;
+  const error = new Error(message);
+  // Type-safe way to extend Error with ApiError properties
+  Object.assign(error, {
+    name,
+    status,
+    retryable,
+  });
+  return error as ApiError;
+}
+
+/**
+ * Create a cached failure error with proper ApiError properties
+ */
+export function createCachedFailureError(message: string): ApiError {
+  return createApiError(message, "CachedFailure", 0, false);
 }
 
 /**

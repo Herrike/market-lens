@@ -7,7 +7,10 @@ import {
   getCachedSuccess,
   cacheSuccess,
 } from "@/utils/stock-quote-cache";
-import { handleHttpError } from "@/utils/stock-api-errors";
+import {
+  handleHttpError,
+  createCachedFailureError,
+} from "@/utils/stock-api-errors";
 import {
   transformHistoricalResponse,
   type HistoricalPrice,
@@ -32,10 +35,7 @@ async function fetchHistoricalData(symbol: string): Promise<StockHistoryData> {
   if (hasCachedFailure("stockHistory1Day", symbol)) {
     const failureData = getCachedFailure("stockHistory1Day", symbol);
     if (failureData) {
-      const error = new Error(failureData.error) as ApiError;
-      error.name = "CachedFailure";
-      error.retryable = false;
-      throw error;
+      throw createCachedFailureError(failureData.error);
     }
   }
 

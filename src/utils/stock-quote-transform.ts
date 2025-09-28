@@ -56,15 +56,18 @@ export interface StockQuoteData {
 function isApiErrorResponse(data: unknown): data is ApiErrorResponse {
   if (typeof data !== "object" || data === null) return false;
 
-  const errorData = data as Record<string, unknown>;
+  // Use proper type checking without casting
+  const hasNestedError =
+    "Error" in data &&
+    typeof data.Error === "object" &&
+    data.Error !== null &&
+    "Message" in data.Error &&
+    typeof data.Error.Message === "string";
 
-  return (
-    (typeof errorData.Error === "object" &&
-      errorData.Error !== null &&
-      typeof (errorData.Error as Record<string, unknown>).Message ===
-        "string") ||
-    typeof errorData["Error Message"] === "string"
-  );
+  const hasDirectError =
+    "Error Message" in data && typeof data["Error Message"] === "string";
+
+  return hasNestedError || hasDirectError;
 }
 
 /**
@@ -76,22 +79,34 @@ function isQuoteResponseArray(data: unknown): data is RawQuoteApiResponse[] {
   const firstItem = data[0];
   if (typeof firstItem !== "object" || firstItem === null) return false;
 
-  const quote = firstItem as Record<string, unknown>;
-
+  // Use proper type checking with 'in' operator instead of casting
   return (
-    typeof quote.symbol === "string" &&
-    typeof quote.price === "number" &&
-    typeof quote.changesPercentage === "number" &&
-    typeof quote.change === "number" &&
-    typeof quote.dayLow === "number" &&
-    typeof quote.dayHigh === "number" &&
-    typeof quote.yearHigh === "number" &&
-    typeof quote.yearLow === "number" &&
-    typeof quote.marketCap === "number" &&
-    typeof quote.priceAvg50 === "number" &&
-    typeof quote.priceAvg200 === "number" &&
-    typeof quote.volume === "number" &&
-    typeof quote.avgVolume === "number"
+    "symbol" in firstItem &&
+    typeof firstItem.symbol === "string" &&
+    "price" in firstItem &&
+    typeof firstItem.price === "number" &&
+    "changesPercentage" in firstItem &&
+    typeof firstItem.changesPercentage === "number" &&
+    "change" in firstItem &&
+    typeof firstItem.change === "number" &&
+    "dayLow" in firstItem &&
+    typeof firstItem.dayLow === "number" &&
+    "dayHigh" in firstItem &&
+    typeof firstItem.dayHigh === "number" &&
+    "yearHigh" in firstItem &&
+    typeof firstItem.yearHigh === "number" &&
+    "yearLow" in firstItem &&
+    typeof firstItem.yearLow === "number" &&
+    "marketCap" in firstItem &&
+    typeof firstItem.marketCap === "number" &&
+    "priceAvg50" in firstItem &&
+    typeof firstItem.priceAvg50 === "number" &&
+    "priceAvg200" in firstItem &&
+    typeof firstItem.priceAvg200 === "number" &&
+    "volume" in firstItem &&
+    typeof firstItem.volume === "number" &&
+    "avgVolume" in firstItem &&
+    typeof firstItem.avgVolume === "number"
   );
 }
 
@@ -103,12 +118,12 @@ export function validateApiResponse(
 ): asserts data is RawQuoteApiResponse[] {
   // Check for API error messages first
   if (isApiErrorResponse(data)) {
-    const errorData = data as ApiErrorResponse;
-    if (errorData.Error?.Message) {
-      throw new Error(errorData.Error.Message);
+    // Type guard ensures data is ApiErrorResponse, no casting needed
+    if (data.Error?.Message) {
+      throw new Error(data.Error.Message);
     }
-    if (errorData["Error Message"]) {
-      throw new Error(errorData["Error Message"]);
+    if (data["Error Message"]) {
+      throw new Error(data["Error Message"]);
     }
   }
 

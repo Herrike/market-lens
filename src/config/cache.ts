@@ -34,6 +34,6 @@ export const cacheConfig = {
     revalidateOnFocus: false,
     revalidateOnReconnect: false, // We rely on localStorage for the time being
   },
-} as const;
+};
 
 export type CacheConfig = typeof cacheConfig;

@@ -36,15 +36,18 @@ function isHistoricalApiErrorResponse(
 ): data is HistoricalApiErrorResponse {
   if (typeof data !== "object" || data === null) return false;
 
-  const errorData = data as Record<string, unknown>;
+  // Use proper type checking without casting
+  const hasNestedError =
+    "Error" in data &&
+    typeof data.Error === "object" &&
+    data.Error !== null &&
+    "Message" in data.Error &&
+    typeof data.Error.Message === "string";
 
-  return (
-    (typeof errorData.Error === "object" &&
-      errorData.Error !== null &&
-      typeof (errorData.Error as Record<string, unknown>).Message ===
-        "string") ||
-    typeof errorData["Error Message"] === "string"
-  );
+  const hasDirectError =
+    "Error Message" in data && typeof data["Error Message"] === "string";
+
+  return hasNestedError || hasDirectError;
 }
 
 /**
@@ -61,13 +64,15 @@ function isHistoricalResponseArray(
   const firstItem = data[0];
   if (typeof firstItem !== "object" || firstItem === null) return false;
 
-  const item = firstItem as Record<string, unknown>;
-
+  // Use proper type checking with 'in' operator instead of casting
   return (
-    typeof item.symbol === "string" &&
-    typeof item.date === "string" &&
-    typeof item.price === "number"
-    // volume is optional
+    "symbol" in firstItem &&
+    typeof firstItem.symbol === "string" &&
+    "date" in firstItem &&
+    typeof firstItem.date === "string" &&
+    "price" in firstItem &&
+    typeof firstItem.price === "number"
+    // volume is optional, so we don't check for it
   );
 }
 
@@ -79,12 +84,12 @@ export function validateHistoricalResponse(
 ): asserts data is RawHistoricalApiResponse[] {
   // Check for API error messages first
   if (isHistoricalApiErrorResponse(data)) {
-    const errorData = data as HistoricalApiErrorResponse;
-    if (errorData.Error?.Message) {
-      throw new Error(errorData.Error.Message);
+    // Type guard ensures data is HistoricalApiErrorResponse, no casting needed
+    if (data.Error?.Message) {
+      throw new Error(data.Error.Message);
     }
-    if (errorData["Error Message"]) {
-      throw new Error(errorData["Error Message"]);
+    if (data["Error Message"]) {
+      throw new Error(data["Error Message"]);
     }
   }
 

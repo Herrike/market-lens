@@ -50,7 +50,7 @@ export function createStockChartOptions(
     },
     series: [
       {
-        type: "line" as const,
+        type: "line",
         name: `${selectedStock} Price`,
         data: chartData,
         color: "#4f46e5", // Indigo for the price line
@@ -68,9 +68,12 @@ export function createStockChartOptions(
     ],
     tooltip: {
       formatter: function () {
+        // In Highcharts tooltip context, x and y are guaranteed to be numbers for line charts
+        const timestamp = this.x;
+        const price = this.y;
         return `<b>${selectedStock}</b><br/>
-                ${Highcharts.dateFormat("%B %e, %Y", this.x as number)}<br/>
-                Price: $${(this.y as number).toFixed(2)}`;
+                ${Highcharts.dateFormat("%B %e, %Y", timestamp)}<br/>
+                ${price ? "Price: $" + price.toFixed(2) : ""}`;
       },
     },
     responsive: {
