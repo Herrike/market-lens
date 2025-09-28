@@ -12,7 +12,7 @@ import { cacheConfig } from "@/config/cache";
 
 // Custom hook for stock search with enhanced caching
 export function useStockSearch(query: string, limit: number = 10) {
-  const shouldFetch = query && query.length >= 2; // Only search if query has 2+ characters
+  const shouldFetch = query && query.length >= 1; // Allow single-letter tickers (F, T, etc.)
   const cacheIdentifier = `${query}-${limit}`;
 
   // Check if we have valid cached data
