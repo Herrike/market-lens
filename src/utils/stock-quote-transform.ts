@@ -17,6 +17,33 @@ export interface StockQuote {
   timestamp: number;
 }
 
+// Raw API response structure for quote data
+interface RawQuoteApiResponse {
+  symbol: string;
+  name?: string;
+  price: number;
+  changesPercentage: number;
+  change: number;
+  dayLow: number;
+  dayHigh: number;
+  yearHigh: number;
+  yearLow: number;
+  marketCap: number;
+  priceAvg50: number;
+  priceAvg200: number;
+  volume: number;
+  avgVolume: number;
+  timestamp?: number;
+}
+
+// API error response structure
+interface ApiErrorResponse {
+  Error?: {
+    Message: string;
+  };
+  "Error Message"?: string;
+}
+
 export interface StockQuoteData {
   quote: StockQuote;
   symbol: string;
@@ -24,24 +51,69 @@ export interface StockQuoteData {
 }
 
 /**
+ * Type guard to check if response contains API error
+ */
+function isApiErrorResponse(data: unknown): data is ApiErrorResponse {
+  if (typeof data !== "object" || data === null) return false;
+
+  const errorData = data as Record<string, unknown>;
+
+  return (
+    (typeof errorData.Error === "object" &&
+      errorData.Error !== null &&
+      typeof (errorData.Error as Record<string, unknown>).Message ===
+        "string") ||
+    typeof errorData["Error Message"] === "string"
+  );
+}
+
+/**
+ * Type guard to check if data is a valid quote API response array
+ */
+function isQuoteResponseArray(data: unknown): data is RawQuoteApiResponse[] {
+  if (!Array.isArray(data) || data.length === 0) return false;
+
+  const firstItem = data[0];
+  if (typeof firstItem !== "object" || firstItem === null) return false;
+
+  const quote = firstItem as Record<string, unknown>;
+
+  return (
+    typeof quote.symbol === "string" &&
+    typeof quote.price === "number" &&
+    typeof quote.changesPercentage === "number" &&
+    typeof quote.change === "number" &&
+    typeof quote.dayLow === "number" &&
+    typeof quote.dayHigh === "number" &&
+    typeof quote.yearHigh === "number" &&
+    typeof quote.yearLow === "number" &&
+    typeof quote.marketCap === "number" &&
+    typeof quote.priceAvg50 === "number" &&
+    typeof quote.priceAvg200 === "number" &&
+    typeof quote.volume === "number" &&
+    typeof quote.avgVolume === "number"
+  );
+}
+
+/**
  * Validate API response format and check for error messages
  */
-export function validateApiResponse(data: unknown): void {
-  // Type guard for error checking - use any for API response validation
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const errorData = data as any;
-
-  // Check for API error messages
-  if (errorData?.Error?.Message) {
-    throw new Error(errorData.Error.Message);
+export function validateApiResponse(
+  data: unknown,
+): asserts data is RawQuoteApiResponse[] {
+  // Check for API error messages first
+  if (isApiErrorResponse(data)) {
+    const errorData = data as ApiErrorResponse;
+    if (errorData.Error?.Message) {
+      throw new Error(errorData.Error.Message);
+    }
+    if (errorData["Error Message"]) {
+      throw new Error(errorData["Error Message"]);
+    }
   }
 
-  if (errorData?.["Error Message"]) {
-    throw new Error(errorData["Error Message"]);
-  }
-
-  // The quote endpoint returns an array with one item
-  if (!Array.isArray(data) || data.length === 0) {
+  // Validate the quote response structure
+  if (!isQuoteResponseArray(data)) {
     console.error("Unexpected API response format:", data);
     throw new Error("No quote data found in API response");
   }
@@ -54,10 +126,9 @@ export function transformQuoteResponse(
   data: unknown,
   symbol: string,
 ): StockQuoteData {
-  validateApiResponse(data);
+  validateApiResponse(data); // This ensures data is RawQuoteApiResponse[]
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const dataArray = data as any[];
+  const dataArray = data; // Already validated as RawQuoteApiResponse[]
   const quoteData = dataArray[0];
 
   const result: StockQuoteData = {
