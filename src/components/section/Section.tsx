@@ -5,11 +5,11 @@ import { useStockDetails } from "@/hooks/useStocks";
 
 // Lazy load Chart component to reduce initial bundle size
 const Chart = lazy(() => import("../chart/Chart"));
-import StockLoadingState from "./states/StockLoadingState";
+import StockLoading from "./states/StockLoading";
 import StockInfoDisplay from "./states/StockInfoDisplay";
 import SelectedStockFallback from "./states/SelectedStockFallback";
 import BackButton from "./ui/BackButton";
-import HomeState from "./states/HomeState";
+import HomeDisplay from "./states/HomeDisplay";
 
 const Section = () => {
   const { selectedStock, searchModalToggle, setSelectedStock } =
@@ -54,7 +54,7 @@ const Section = () => {
             </div>
 
             {stockLoading ? (
-              <StockLoadingState />
+              <StockLoading />
             ) : stock ? (
               <StockInfoDisplay stock={stock} />
             ) : (
@@ -68,7 +68,7 @@ const Section = () => {
             <BackButton onClick={handleBackToHome} />
           </div>
         ) : (
-          <HomeState />
+          <HomeDisplay />
         )}
         {searchModalToggle && <SearchModal />}
       </div>

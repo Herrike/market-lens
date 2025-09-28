@@ -1,6 +1,6 @@
 import FreeTierSuggestions from "../../free-tier-suggestions/FreeTierSuggestions";
 
-const HomeState = () => {
+const HomeDisplay = () => {
   return (
     <>
       <h1
@@ -22,4 +22,4 @@ const HomeState = () => {
   );
 };
 
-export default HomeState;
+export default HomeDisplay;

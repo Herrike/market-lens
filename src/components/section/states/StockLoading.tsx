@@ -1,4 +1,4 @@
-const StockLoadingState = () => {
+const StockLoading = () => {
   return (
     <div className="animate-pulse" data-testid="stock-loading">
       <div className="h-8 bg-gray-200 rounded mb-2"></div>
@@ -7,4 +7,4 @@ const StockLoadingState = () => {
   );
 };
 
-export default StockLoadingState;
+export default StockLoading;
