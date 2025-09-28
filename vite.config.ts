@@ -13,6 +13,22 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // React and React DOM
+          react: ["react", "react-dom"],
+          // Highcharts charting library (heavy)
+          charts: ["highcharts", "highcharts-react-official"],
+          // UI components and utilities
+          ui: ["@headlessui/react", "@heroicons/react"],
+          // Data fetching and utilities
+          utils: ["swr"],
+        },
+      },
+    },
+  },
   test: {
     environment: "jsdom",
     setupFiles: ["./src/test/setup.ts"],

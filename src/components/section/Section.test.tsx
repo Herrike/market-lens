@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import React from "react";
@@ -152,14 +152,20 @@ describe("Stock Detail Display Component", () => {
       );
 
       // Check for loading skeleton elements
-      const loadingElements = screen
-        .getAllByRole("generic")
-        .filter((el) => el.className.includes("animate-pulse"));
-      expect(loadingElements.length).toBeGreaterThan(0);
+      await waitFor(() => {
+        expect(screen.getByTestId("stock-loading")).toBeInTheDocument();
+      });
 
-      // Should still show chart and back button even during loading
-      expect(screen.getByTestId("stock-chart")).toBeInTheDocument();
-      expect(screen.getByTestId("back-to-home-button")).toBeInTheDocument();
+      // Verify the animate-pulse class exists
+      const loadingElement = screen.getByTestId("stock-loading");
+      expect(loadingElement.className).toContain("animate-pulse");
+
+      // Should show chart (may be loading) and back button even during loading
+      await waitFor(() => {
+        // Chart component is dynamically loaded, so use queryByTestId
+        expect(screen.queryByTestId("stock-chart")).toBeInTheDocument();
+        expect(screen.getByTestId("back-to-home-button")).toBeInTheDocument();
+      });
     });
   });
 
@@ -190,8 +196,10 @@ describe("Stock Detail Display Component", () => {
       expect(screen.getByTestId("stock-exchange")).toBeInTheDocument();
       expect(screen.getByTestId("stock-exchange-short")).toBeInTheDocument();
 
-      // Check chart is displayed
-      expect(screen.getByTestId("stock-chart")).toBeInTheDocument();
+      // Check chart is displayed (wait for dynamic import)
+      await waitFor(() => {
+        expect(screen.getByTestId("stock-chart")).toBeInTheDocument();
+      });
 
       // Check back button
       expect(screen.getByTestId("back-to-home-button")).toBeInTheDocument();
@@ -247,7 +255,7 @@ describe("Stock Detail Display Component", () => {
   });
 
   describe("Stock Detail Fallback State", () => {
-    it("should show symbol when no stock details available", () => {
+    it("should show symbol when no stock details available", async () => {
       render(
         <SectionWrapper contextValue={{ selectedStock: "UNKNOWN" }}>
           <Section />
@@ -260,8 +268,10 @@ describe("Stock Detail Display Component", () => {
       ).toBeInTheDocument();
       expect(screen.getByText(/Selected Stock Symbol/)).toBeInTheDocument();
 
-      // Chart should still be shown
-      expect(screen.getByTestId("stock-chart")).toBeInTheDocument();
+      // Chart should still be shown (wait for dynamic import)
+      await waitFor(() => {
+        expect(screen.getByTestId("stock-chart")).toBeInTheDocument();
+      });
 
       // Back button should be available
       expect(screen.getByTestId("back-to-home-button")).toBeInTheDocument();
@@ -283,7 +293,9 @@ describe("Stock Detail Display Component", () => {
         </SectionWrapper>,
       );
 
-      expect(screen.getByTestId("stock-chart")).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByTestId("stock-chart")).toBeInTheDocument();
+      });
     });
 
     it("should display chart even with loading state", async () => {
@@ -300,7 +312,9 @@ describe("Stock Detail Display Component", () => {
         </SectionWrapper>,
       );
 
-      expect(screen.getByTestId("stock-chart")).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByTestId("stock-chart")).toBeInTheDocument();
+      });
     });
 
     it("should not display chart on homepage", () => {
@@ -393,7 +407,9 @@ describe("Stock Detail Display Component", () => {
       expect(screen.getByText(/Selected Stock Symbol/)).toBeInTheDocument();
 
       // Chart and back button should still be available
-      expect(screen.getByTestId("stock-chart")).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByTestId("stock-chart")).toBeInTheDocument();
+      });
       expect(screen.getByTestId("back-to-home-button")).toBeInTheDocument();
     });
   });

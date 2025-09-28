@@ -1,8 +1,10 @@
 import SearchContext from "@/contexts/SearchContext";
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, lazy } from "react";
 import SearchModal from "../search-modal/SearchModal";
-import Chart from "../chart/Chart";
 import { useStockDetails } from "@/hooks/useStocks";
+
+// Lazy load Chart component to reduce initial bundle size
+const Chart = lazy(() => import("../chart/Chart"));
 import StockLoadingState from "./states/StockLoadingState";
 import StockInfoDisplay from "./states/StockInfoDisplay";
 import SelectedStockFallback from "./states/SelectedStockFallback";
@@ -59,7 +61,7 @@ const Section = () => {
               <SelectedStockFallback selectedStock={selectedStock} />
             )}
 
-            {/* Chart Component with Suspense */}
+            {/* Chart Component with built-in Suspense */}
             <Chart />
 
             {/* Back button footer */}
