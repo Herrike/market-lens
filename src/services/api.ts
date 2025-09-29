@@ -18,7 +18,14 @@ export function buildApiUrl(
   endpoint: string,
   params?: Record<string, string | number>,
 ): string {
-  const url = new URL(`${config.baseUrl}${endpoint}`);
+  let baseUrl = config.baseUrl;
+
+  // Special case: use direct financialmodelingprep.com for search-symbol endpoint
+  if (endpoint.includes("search-symbol")) {
+    baseUrl = "https://financialmodelingprep.com";
+  }
+
+  const url = new URL(`${baseUrl}${endpoint}`);
 
   // Add API key
   url.searchParams.append("apikey", config.apiKey);
@@ -83,7 +90,7 @@ export async function searchStocks(
   fetchFn: typeof fetch = fetch,
 ): Promise<Stock[]> {
   const cleanQuery = validateStockQuery(query);
-  const url = buildApiUrl(config, "/search", {
+  const url = buildApiUrl(config, "/stable/search-symbol", {
     query: cleanQuery,
     limit,
   });

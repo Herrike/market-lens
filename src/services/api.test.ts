@@ -47,13 +47,15 @@ describe("API Service", () => {
 
   describe("buildApiUrl", () => {
     it("should build correct URL with endpoint and API key", () => {
-      const url = buildApiUrl(mockConfig, "/search");
+      const url = buildApiUrl(mockConfig, "/stable/search-symbol");
 
-      expect(url).toBe("https://test-api.com/v3/search?apikey=test-key");
+      expect(url).toBe(
+        "https://financialmodelingprep.com/stable/search-symbol?apikey=test-key",
+      );
     });
 
     it("should include additional parameters", () => {
-      const url = buildApiUrl(mockConfig, "/search", {
+      const url = buildApiUrl(mockConfig, "/stable/search-symbol", {
         query: "AAPL",
         limit: 10,
       });
@@ -190,7 +192,7 @@ describe("API Service", () => {
       const result = await searchStocks("aapl", 10, mockConfig, mockFetch);
 
       expect(mockFetch).toHaveBeenCalledWith(
-        "https://test-api.com/v3/search?apikey=test-key&query=AAPL&limit=10",
+        "https://financialmodelingprep.com/stable/search-symbol?apikey=test-key&query=AAPL&limit=10",
       );
       expect(result).toEqual([mockStock]);
     });
