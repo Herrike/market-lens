@@ -18,14 +18,7 @@ export function buildApiUrl(
   endpoint: string,
   params?: Record<string, string | number>,
 ): string {
-  let baseUrl = config.baseUrl;
-
-  // Special case: remove v3 from base URL for search-symbol endpoint
-  if (endpoint.includes("search-symbol")) {
-    baseUrl = baseUrl.replace("/v3", "");
-  }
-
-  const url = new URL(`${baseUrl}${endpoint}`);
+  const url = new URL(`${config.baseUrl}${endpoint}`);
 
   // Add API key
   url.searchParams.append("apikey", config.apiKey);
@@ -90,7 +83,7 @@ export async function searchStocks(
   fetchFn: typeof fetch = fetch,
 ): Promise<Stock[]> {
   const cleanQuery = validateStockQuery(query);
-  const url = buildApiUrl(config, "/stable/search-symbol", {
+  const url = buildApiUrl(config, "/search", {
     query: cleanQuery,
     limit,
   });
