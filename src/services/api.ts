@@ -18,7 +18,14 @@ export function buildApiUrl(
   endpoint: string,
   params?: Record<string, string | number>,
 ): string {
-  const url = new URL(`${config.baseUrl}${endpoint}`);
+  let baseUrl = config.baseUrl;
+
+  // Special case: remove v3 from base URL for search-symbol endpoint
+  if (endpoint.includes("search-symbol")) {
+    baseUrl = baseUrl.replace("/v3", "");
+  }
+
+  const url = new URL(`${baseUrl}${endpoint}`);
 
   // Add API key
   url.searchParams.append("apikey", config.apiKey);

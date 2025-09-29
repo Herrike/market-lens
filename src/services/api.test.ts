@@ -50,7 +50,7 @@ describe("API Service", () => {
       const url = buildApiUrl(mockConfig, "/stable/search-symbol");
 
       expect(url).toBe(
-        "https://test-api.com/v3/stable/search-symbol?apikey=test-key",
+        "https://test-api.com/stable/search-symbol?apikey=test-key",
       );
     });
 
@@ -192,7 +192,7 @@ describe("API Service", () => {
       const result = await searchStocks("aapl", 10, mockConfig, mockFetch);
 
       expect(mockFetch).toHaveBeenCalledWith(
-        "https://test-api.com/v3/stable/search-symbol?apikey=test-key&query=AAPL&limit=10",
+        "https://test-api.com/stable/search-symbol?apikey=test-key&query=AAPL&limit=10",
       );
       expect(result).toEqual([mockStock]);
     });
