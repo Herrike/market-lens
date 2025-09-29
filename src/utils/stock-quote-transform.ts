@@ -17,24 +17,11 @@ export interface StockQuote {
   timestamp: number;
 }
 
-// Raw API response structure for quote data
-interface RawQuoteApiResponse {
-  symbol: string;
+// Raw API response has the same structure but with optional name and timestamp
+type RawQuoteApiResponse = Omit<StockQuote, "name" | "timestamp"> & {
   name?: string;
-  price: number;
-  changesPercentage: number;
-  change: number;
-  dayLow: number;
-  dayHigh: number;
-  yearHigh: number;
-  yearLow: number;
-  marketCap: number;
-  priceAvg50: number;
-  priceAvg200: number;
-  volume: number;
-  avgVolume: number;
   timestamp?: number;
-}
+};
 
 // API error response structure
 interface ApiErrorResponse {
