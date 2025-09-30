@@ -1,6 +1,7 @@
 import { useCallback, useContext } from "react";
 import clsx from "clsx";
 import SearchContext from "@/contexts/SearchContext";
+import SidebarContext from "@/contexts/SidebarContext";
 
 // Types
 export interface MenuNavigationItem {
@@ -19,11 +20,16 @@ const NavigationItem = ({ item }: { item: MenuNavigationItem }) => {
     setSearchQuery,
   } = useContext(SearchContext);
 
+  const { setSidebarOpen } = useContext(SidebarContext);
+
   const handleClick = useCallback(() => {
     // Close search modal if open
     if (searchModalToggle) {
       setSearchModalToggle(false);
     }
+
+    // Close mobile sidebar when clicking on navigation items
+    setSidebarOpen(false);
 
     // Handle Dashboard click - reset to homepage by clearing context state
     if (item.name === "Dashboard") {
@@ -36,6 +42,7 @@ const NavigationItem = ({ item }: { item: MenuNavigationItem }) => {
     setSearchModalToggle,
     setSelectedStock,
     setSearchQuery,
+    setSidebarOpen,
   ]);
 
   return (
