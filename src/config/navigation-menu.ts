@@ -14,6 +14,6 @@ type NavigationItem = {
 
 const navigation: NavigationItem[] = [
   { name: "Dashboard", href: "#", icon: HomeIcon },
-  { name: "Stocks", href: "#", icon: ChartPieIcon, hidden: true },
+  { name: "Stocks", href: "#", icon: ChartPieIcon, hidden: true }, // we could expand this list and introduce routing later
 ];
 export default navigation;

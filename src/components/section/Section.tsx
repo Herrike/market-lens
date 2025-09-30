@@ -2,6 +2,7 @@ import SearchContext from "@/contexts/SearchContext";
 import { useCallback, useContext, lazy } from "react";
 import SearchModal from "../search-modal/SearchModal";
 import { useStockDetails } from "@/hooks/useStocks";
+import { ChartBarIcon } from "@heroicons/react/24/outline";
 
 // Lazy load Chart component to reduce initial bundle size
 const Chart = lazy(() => import("../chart/Chart"));
@@ -37,19 +38,7 @@ const Section = () => {
           >
             <div className="flex items-center justify-center mb-6">
               <div className="bg-indigo-100 rounded-full p-3">
-                <svg
-                  className="h-8 w-8 text-indigo-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                  />
-                </svg>
+                <ChartBarIcon className="h-8 w-8 text-indigo-600" />
               </div>
             </div>
 

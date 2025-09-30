@@ -40,6 +40,9 @@ export function buildApiUrl(
   return url.toString();
 }
 
+// Regex for basic stock symbol validation (consider {1, 15} if needed)
+const tickerRegex = new RegExp(/^[A-Z0-9^.\-:]{1,10}$/i);
+
 // Pure function to validate stock query - easily testable
 export function validateStockQuery(query: string): string {
   if (!query || query.trim().length === 0) {
@@ -48,7 +51,7 @@ export function validateStockQuery(query: string): string {
 
   // Validate query format (basic stock symbol validation)
   const cleanQuery = query.trim().toUpperCase();
-  if (!/^[A-Z0-9^.\-:]{1,10}$/i.test(cleanQuery)) {
+  if (tickerRegex.test(cleanQuery)) {
     throw new Error("Invalid stock symbol format");
   }
 

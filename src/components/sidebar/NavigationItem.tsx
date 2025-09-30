@@ -12,8 +12,12 @@ export interface MenuNavigationItem {
 
 // Navigation Item Component
 const NavigationItem = ({ item }: { item: MenuNavigationItem }) => {
-  const { searchModalToggle, setSearchModalToggle, setSelectedStock } =
-    useContext(SearchContext);
+  const {
+    searchModalToggle,
+    setSearchModalToggle,
+    setSelectedStock,
+    setSearchQuery,
+  } = useContext(SearchContext);
 
   const handleClick = useCallback(() => {
     // Close search modal if open
@@ -24,8 +28,15 @@ const NavigationItem = ({ item }: { item: MenuNavigationItem }) => {
     // Handle Dashboard click - reset to homepage by clearing context state
     if (item.name === "Dashboard") {
       setSelectedStock(""); // Clear selected stock from context
+      setSearchQuery(""); // Clear search query from context as well
     }
-  }, [searchModalToggle, setSearchModalToggle, setSelectedStock, item.name]);
+  }, [
+    searchModalToggle,
+    item.name,
+    setSearchModalToggle,
+    setSelectedStock,
+    setSearchQuery,
+  ]);
 
   return (
     <li key={item.name}>
