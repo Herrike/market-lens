@@ -39,10 +39,6 @@ export function useStockSearch(query: string, limit: number = 10) {
       // Cache the fresh data
       setCache("stockSearch", cacheIdentifier, data);
 
-      console.log(
-        `💾 Cached API response for query: "${query}" (${data.length} results, TTL: 24h)`,
-      );
-
       return data;
     },
     {
@@ -93,10 +89,6 @@ export function findStockInCache(symbol: string): Stock | null {
             );
 
             if (foundStock) {
-              console.log(
-                `📦 Found ${symbol} details in cached search results:`,
-                foundStock,
-              );
               return foundStock;
             }
           }
@@ -107,7 +99,6 @@ export function findStockInCache(symbol: string): Stock | null {
     }
   }
 
-  console.log(`❌ Stock ${symbol} not found in cached search results`);
   return null;
 }
 
@@ -171,6 +162,4 @@ export function clearAllStockCache(): void {
   keysToRemove.forEach((key) => {
     localStorage.removeItem(key);
   });
-
-  console.log(`🗑️ Cleared ${keysToRemove.length} stock cache entries`);
 }

@@ -34,9 +34,6 @@ async function fetchStockQuote(symbol: string): Promise<StockQuoteData> {
   if (hasCachedFailure("stockDetails", symbol)) {
     const failureData = getCachedFailure("stockDetails", symbol);
     if (failureData) {
-      console.log(
-        `❌ Using cached failure for quote ${symbol}: ${failureData.error}`,
-      );
       throw createCachedFailureError(failureData.error);
     }
   }
@@ -60,11 +57,7 @@ async function fetchStockQuote(symbol: string): Promise<StockQuoteData> {
   // Use the quote endpoint which is available on free tier
   const url = `https://financialmodelingprep.com/api/v3/quote/${symbol}?apikey=${API_KEY}`;
 
-  console.log(`📡 API URL: ${url.replace(API_KEY, "XXXXX")}`);
-
   const response = await fetch(url);
-
-  console.log(`📈 Response status: ${response.status} ${response.statusText}`);
 
   if (!response.ok) {
     handleHttpError(response, "stockDetails", symbol);
@@ -72,12 +65,8 @@ async function fetchStockQuote(symbol: string): Promise<StockQuoteData> {
 
   const data = await response.json();
 
-  console.log(`📊 Raw quote response:`, data);
-
   // Transform and validate the response
   const result = transformQuoteResponse(data, symbol);
-
-  console.log(`✅ Processed quote data for ${symbol}: $${result.quote.price}`);
 
   // Cache successful response
   cacheSuccess("stockDetails", symbol, result);
