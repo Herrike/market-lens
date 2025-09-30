@@ -4,6 +4,9 @@
 
 import { getApiErrorMessage, type ApiErrorResponse } from "./api-error-cases";
 
+// Re-export types for convenience
+export type { ApiErrorResponse } from "./api-error-cases";
+
 /**
  * Formats error message for display to users
  */
