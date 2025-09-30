@@ -1,12 +1,14 @@
 import SearchContext from "@/contexts/SearchContext";
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useState } from "react";
 import clsx from "clsx";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { useStockSearch } from "@/hooks/useStocks";
 import { handleApiError } from "@/utils/api-errors";
+import { validateStockQuery } from "@/services/api";
 
 const SearchModalForm = () => {
   const { searchQuery, setSearchQuery } = useContext(SearchContext);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   // Use SWR hook for API calls - only search when query is submitted
   const { data: _data, error, isLoading } = useStockSearch(searchQuery);
@@ -37,10 +39,37 @@ const SearchModalForm = () => {
       const formData = new FormData(e.currentTarget);
       const formSearch = formData.get("search");
       const query = typeof formSearch === "string" ? formSearch : ""; // ensure it's a string
-      const trimmedQuery = query?.trim();
 
-      if (trimmedQuery && trimmedQuery !== searchQuery) {
-        setSearchQuery(trimmedQuery);
+      // Clear previous validation error
+      setValidationError(null);
+
+      if (query) {
+        try {
+          // Validate the query format before searching
+          validateStockQuery(query);
+
+          // Only set search query if validation passes and it's different
+          if (query !== searchQuery) {
+            setSearchQuery(query);
+          }
+        } catch (validationErr) {
+          // Handle validation error with user-friendly message
+          const errorMessage =
+            validationErr instanceof Error
+              ? validationErr.message
+              : "Invalid stock symbol format";
+
+          // Convert technical error to user-friendly message
+          const userFriendlyMessage = errorMessage.includes(
+            "Invalid stock symbol format",
+          )
+            ? "Please enter a valid stock symbol (e.g., AAPL, MSFT, ^DJI)"
+            : errorMessage.includes("empty")
+              ? "Please enter a stock symbol"
+              : "Invalid ticker format - please use letters, numbers, dots, or dashes only";
+
+          setValidationError(userFriendlyMessage);
+        }
       }
     },
     [searchQuery, setSearchQuery],
@@ -63,11 +92,13 @@ const SearchModalForm = () => {
             type="search"
             placeholder="Enter stock symbol (e.g., AAPL)"
             disabled={isLoading}
-            aria-invalid={!!error}
-            aria-describedby={error ? "search-error" : undefined}
+            aria-invalid={!!(validationError || error)}
+            aria-describedby={
+              validationError || error ? "search-error" : undefined
+            }
             className={clsx(
               baseInputClasses,
-              error && errorClasses,
+              (validationError || error) && errorClasses,
               isLoading && loadingClasses,
             )}
           />
@@ -80,15 +111,14 @@ const SearchModalForm = () => {
             <MagnifyingGlassIcon className="h-4 w-4" aria-hidden="true" />
           </button>
         </div>
-        {error && (
+        {(validationError || error) && (
           <p
             id="search-error"
             className="mt-2 text-sm text-red-600 dark:text-red-400"
           >
-            {
+            {validationError ||
               handleApiError(error, "Search failed. Please try again.")
-                .userMessage
-            }
+                .userMessage}
           </p>
         )}
       </div>

@@ -2,6 +2,10 @@ import type { Stock } from "@/types/api.types";
 import type { ApiError } from "@/types/api.types";
 import { handleApiError, getErrorSuggestion } from "@/utils/api-errors";
 import SearchResultItem from "./SearchResultItem";
+import {
+  MagnifyingGlassIcon,
+  ExclamationTriangleIcon,
+} from "@heroicons/react/24/outline";
 
 interface SearchResultsListProps {
   results: Stock[];
@@ -17,7 +21,7 @@ const SearchResultsList = ({
   query,
 }: SearchResultsListProps) => {
   // Don't show anything if no query
-  if (!query || query.length < 2) {
+  if (!query || query.length < 1) {
     return null;
   }
 
@@ -48,19 +52,7 @@ const SearchResultsList = ({
     return (
       <div className="mt-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
         <div className="flex items-start">
-          <svg
-            className="h-5 w-5 text-red-400 dark:text-red-300 mt-0.5 flex-shrink-0"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
+          <ExclamationTriangleIcon className="h-5 w-5 text-red-400 dark:text-red-300 mt-0.5 flex-shrink-0" />
           <div className="ml-3 flex-1">
             <h4 className="text-sm font-medium text-red-800 dark:text-red-200">
               Search Error
@@ -82,24 +74,12 @@ const SearchResultsList = ({
   // No results
   if (!results || results.length === 0) {
     return (
-      <div className="mt-4 p-6 text-center">
-        <svg
-          className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-          />
-        </svg>
-        <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">
+      <div className="mt-4 py-8 px-6 text-center">
+        <MagnifyingGlassIcon className="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500" />
+        <h3 className="mt-6 text-lg font-medium text-gray-900 dark:text-white">
           No stocks found
         </h3>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        <p className="mt-4 text-sm text-gray-500 dark:text-gray-400 max-w-sm mx-auto leading-relaxed">
           No results for "{query}". Try a different symbol or company name.
         </p>
       </div>
