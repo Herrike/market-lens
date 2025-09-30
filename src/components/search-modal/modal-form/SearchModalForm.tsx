@@ -45,12 +45,12 @@ const SearchModalForm = () => {
 
       if (query) {
         try {
-          // Validate the query format before searching
-          validateStockQuery(query);
+          // Validate the query format before searching (this also trims and uppercases)
+          const cleanedQuery = validateStockQuery(query);
 
           // Only set search query if validation passes and it's different
-          if (query !== searchQuery) {
-            setSearchQuery(query);
+          if (cleanedQuery !== searchQuery) {
+            setSearchQuery(cleanedQuery);
           }
         } catch (validationErr) {
           // Handle validation error with user-friendly message
