@@ -1,11 +1,13 @@
 import SearchContext from "@/contexts/SearchContext";
 import { useCallback, useContext, lazy } from "react";
-import SearchModal from "../search-modal/SearchModal";
 import { useStockDetails } from "@/hooks/useStocks";
 import { ChartBarIcon } from "@heroicons/react/24/outline";
 
 // Lazy load Chart component to reduce initial bundle size
 const Chart = lazy(() => import("../chart/Chart"));
+
+// Lazy load SearchModal - only needed when user opens search
+const SearchModal = lazy(() => import("../search-modal/SearchModal"));
 import StockLoading from "./states/StockLoading";
 import StockInfoDisplay from "./states/StockInfoDisplay";
 import SelectedStockFallback from "./states/SelectedStockFallback";

@@ -5,7 +5,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
-import React from "react";
+import React, { Suspense } from "react";
 import Section from "@/components/section/Section";
 import SearchContext from "@/contexts/SearchContext";
 import { SidebarProvider } from "@/providers/SidebarProvider";
@@ -76,7 +76,7 @@ const SectionWrapper = ({
   return (
     <SidebarProvider>
       <SearchContext.Provider value={mockContext}>
-        {children}
+        <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
       </SearchContext.Provider>
     </SidebarProvider>
   );
@@ -120,7 +120,7 @@ describe("Stock Detail Display Component", () => {
       ).not.toBeInTheDocument();
     });
 
-    it("should show search modal when toggle is true", () => {
+    it("should show search modal when toggle is true", async () => {
       render(
         <SectionWrapper
           contextValue={{
@@ -132,7 +132,8 @@ describe("Stock Detail Display Component", () => {
         </SectionWrapper>,
       );
 
-      expect(screen.getByTestId("search-modal")).toBeInTheDocument();
+      // Wait for lazy loaded SearchModal to render
+      expect(await screen.findByTestId("search-modal")).toBeInTheDocument();
     });
   });
 
