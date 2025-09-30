@@ -43,7 +43,7 @@ jobs:
         run: pnpm build
         env:
           NODE_ENV: production
-          VITE_FMP_BASE_URL: "https://financialmodelingprep.com/api/v3"
+          VITE_FMP_BASE_URL: ${{ vars.VITE_FMP_BASE_URL || 'https://financialmodelingprep.com' }} # not an issue. If undefined, defaults to this value
           VITE_FMP_API_KEY: ${{ secrets.VITE_FMP_API_KEY }}
 
       - name: Deploy to GitHub Pages
