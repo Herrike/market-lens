@@ -2,8 +2,8 @@
  * @vitest-environment jsdom
  */
 import { describe, it, expect } from "vitest";
+import { getApiErrorMessage } from "./api-error-cases";
 import {
-  getApiErrorMessage,
   formatErrorMessage,
   isRetryableError,
   getErrorSuggestion,
