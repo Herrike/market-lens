@@ -51,7 +51,7 @@ export function validateStockQuery(query: string): string {
 
   // Validate query format (basic stock symbol validation)
   const cleanQuery = query.trim().toUpperCase();
-  if (tickerRegex.test(cleanQuery)) {
+  if (!tickerRegex.test(cleanQuery)) {
     throw new Error("Invalid stock symbol format");
   }
 
