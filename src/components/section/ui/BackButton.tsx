@@ -12,7 +12,7 @@ const BackButton = ({ onClick }: BackButtonProps) => {
     >
       <button
         onClick={onClick}
-        data-testid="back-to-home-button"
+        data-testid="back-btn"
         className="inline-flex items-center gap-x-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:text-indigo-600 transition-colors duration-200 cursor-pointer dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-indigo-400"
       >
         <ArrowLeftIcon className="w-4 h-4" aria-hidden="true" />

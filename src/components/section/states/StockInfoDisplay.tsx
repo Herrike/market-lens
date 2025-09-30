@@ -13,12 +13,12 @@ interface StockInfoDisplayProps {
 const StockInfoDisplay = ({ stock }: StockInfoDisplayProps) => {
   return (
     <>
-      <h1
+      <h2
         className="text-3xl font-bold text-gray-900 mb-2"
         data-testid="stock-name"
       >
         {stock.name}
-      </h1>
+      </h2>
       <p className="text-gray-600 mb-4" data-testid="stock-info">
         <span
           className="font-semibold text-indigo-600"

@@ -29,9 +29,12 @@ const SearchResultItem = ({ stock }: SearchResultItemProps) => {
           {/* Stock Details */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <h4 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+              <h3
+                className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors"
+                data-testid={`ticker-${stock.symbol.toLowerCase()}`}
+              >
                 {stock.symbol}
-              </h4>
+              </h3>
               <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
                 {stock.currency}
               </span>

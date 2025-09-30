@@ -73,7 +73,7 @@ describe("ErrorBoundary Component", () => {
       render(
         <ErrorBoundary>
           <ErrorThrowingComponent shouldThrow={false} />
-        </ErrorBoundary>
+        </ErrorBoundary>,
       );
 
       expect(screen.getByTestId("working-component")).toBeInTheDocument();
@@ -84,11 +84,11 @@ describe("ErrorBoundary Component", () => {
       render(
         <ErrorBoundary>
           <div data-testid="healthy-component">Healthy component</div>
-        </ErrorBoundary>
+        </ErrorBoundary>,
       );
 
       expect(
-        screen.queryByText("Something went wrong")
+        screen.queryByText("Something went wrong"),
       ).not.toBeInTheDocument();
       expect(screen.queryByTestId("exclamation-icon")).not.toBeInTheDocument();
     });
@@ -99,7 +99,7 @@ describe("ErrorBoundary Component", () => {
       render(
         <ErrorBoundary>
           <ErrorThrowingComponent shouldThrow={true} />
-        </ErrorBoundary>
+        </ErrorBoundary>,
       );
 
       // Should show error UI
@@ -114,13 +114,13 @@ describe("ErrorBoundary Component", () => {
       render(
         <ErrorBoundary>
           <ErrorThrowingComponent shouldThrow={true} />
-        </ErrorBoundary>
+        </ErrorBoundary>,
       );
 
       expect(consoleSpy).toHaveBeenCalledWith(
         "Error Boundary caught an error:",
         expect.any(Error),
-        expect.any(Object)
+        expect.any(Object),
       );
     });
 
@@ -131,12 +131,12 @@ describe("ErrorBoundary Component", () => {
       render(
         <ErrorBoundary>
           <ErrorThrowingComponent shouldThrow={true} />
-        </ErrorBoundary>
+        </ErrorBoundary>,
       );
 
       // Should show error details section
       expect(
-        screen.getByText("Error Details (Development)")
+        screen.getByText("Error Details (Development)"),
       ).toBeInTheDocument();
       expect(screen.getByText(/Test error message/)).toBeInTheDocument();
 
@@ -150,12 +150,12 @@ describe("ErrorBoundary Component", () => {
       render(
         <ErrorBoundary>
           <ErrorThrowingComponent shouldThrow={true} />
-        </ErrorBoundary>
+        </ErrorBoundary>,
       );
 
       // Should not show error details
       expect(
-        screen.queryByText("Error Details (Development)")
+        screen.queryByText("Error Details (Development)"),
       ).not.toBeInTheDocument();
 
       vi.unstubAllEnvs();
@@ -171,7 +171,7 @@ describe("ErrorBoundary Component", () => {
       render(
         <ErrorBoundary fallback={customFallback}>
           <ErrorThrowingComponent shouldThrow={true} />
-        </ErrorBoundary>
+        </ErrorBoundary>,
       );
 
       expect(screen.getByTestId("custom-fallback")).toBeInTheDocument();
@@ -179,7 +179,7 @@ describe("ErrorBoundary Component", () => {
 
       // Should not show default error UI
       expect(
-        screen.queryByText("Something went wrong")
+        screen.queryByText("Something went wrong"),
       ).not.toBeInTheDocument();
     });
 
@@ -187,15 +187,15 @@ describe("ErrorBoundary Component", () => {
       render(
         <ErrorBoundary>
           <ErrorThrowingComponent shouldThrow={true} />
-        </ErrorBoundary>
+        </ErrorBoundary>,
       );
 
       // Should show default error UI
       expect(screen.getByText("Something went wrong")).toBeInTheDocument();
       expect(
         screen.getByText(
-          "We're sorry, but something unexpected happened. This has been logged and we're working to fix it."
-        )
+          "We're sorry, but something unexpected happened. This has been logged and we're working to fix it.",
+        ),
       ).toBeInTheDocument();
     });
   });
@@ -205,7 +205,7 @@ describe("ErrorBoundary Component", () => {
       render(
         <ErrorBoundary>
           <ConditionalErrorComponent />
-        </ErrorBoundary>
+        </ErrorBoundary>,
       );
 
       // Trigger error
@@ -216,7 +216,7 @@ describe("ErrorBoundary Component", () => {
       expect(screen.getByText("Something went wrong")).toBeInTheDocument();
 
       // Click retry button
-      const retryButton = screen.getByText("Try Again");
+      const retryButton = screen.getByTestId("try-again");
       fireEvent.click(retryButton);
 
       // After retry, the component should be back to working state initially
@@ -228,10 +228,10 @@ describe("ErrorBoundary Component", () => {
       render(
         <ErrorBoundary>
           <ErrorThrowingComponent shouldThrow={true} />
-        </ErrorBoundary>
+        </ErrorBoundary>,
       );
 
-      const reloadButton = screen.getByText("Reload Page");
+      const reloadButton = screen.getByTestId("reload-page");
       fireEvent.click(reloadButton);
 
       expect(mockReload).toHaveBeenCalledTimes(1);
@@ -243,15 +243,15 @@ describe("ErrorBoundary Component", () => {
       render(
         <ErrorBoundary>
           <ErrorThrowingComponent shouldThrow={true} />
-        </ErrorBoundary>
+        </ErrorBoundary>,
       );
 
       // Check that the main error UI container exists
       expect(screen.getByText("Something went wrong")).toBeInTheDocument();
 
       // Check that buttons have proper classes
-      const tryAgainButton = screen.getByText("Try Again");
-      const reloadButton = screen.getByText("Reload Page");
+      const tryAgainButton = screen.getByTestId("try-again");
+      const reloadButton = screen.getByTestId("reload-page");
 
       expect(tryAgainButton).toHaveClass("bg-indigo-600");
       expect(reloadButton).toHaveClass("bg-gray-300");
@@ -261,11 +261,11 @@ describe("ErrorBoundary Component", () => {
       render(
         <ErrorBoundary>
           <ErrorThrowingComponent shouldThrow={true} />
-        </ErrorBoundary>
+        </ErrorBoundary>,
       );
 
-      const retryButton = screen.getByText("Try Again");
-      const reloadButton = screen.getByText("Reload Page");
+      const retryButton = screen.getByTestId("try-again");
+      const reloadButton = screen.getByTestId("reload-page");
 
       expect(retryButton).toHaveClass("bg-indigo-600", "hover:bg-indigo-700");
       expect(reloadButton).toHaveClass("bg-gray-300", "hover:bg-gray-400");

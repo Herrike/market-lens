@@ -6,15 +6,15 @@ interface QuoteFallbackCardProps {
 }
 
 const QuoteFallbackCard = ({
-  selectedStock,
+  selectedStock: _selectedStock,
   quoteData,
 }: QuoteFallbackCardProps) => {
   return (
     <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-6 mb-6">
       <div className="text-center">
-        <h3 className="text-lg font-semibold text-indigo-800 mb-2">
-          {selectedStock} - Current Quote
-        </h3>
+        <h2 className="text-lg font-semibold text-indigo-800 mb-2">
+          Quote Available
+        </h2>
         <p className="text-sm text-indigo-600 mb-4">
           Historical data requires a paid subscription. Showing current price
           data instead.

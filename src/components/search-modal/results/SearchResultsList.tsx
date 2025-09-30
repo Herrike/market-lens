@@ -54,9 +54,9 @@ const SearchResultsList = ({
         <div className="flex items-start">
           <ExclamationTriangleIcon className="h-5 w-5 text-red-400 dark:text-red-300 mt-0.5 flex-shrink-0" />
           <div className="ml-3 flex-1">
-            <h4 className="text-sm font-medium text-red-800 dark:text-red-200">
-              Search Error
-            </h4>
+            <h2 className="text-sm font-medium text-red-800 dark:text-red-200">
+              Search failed
+            </h2>
             <p className="text-sm text-red-700 dark:text-red-300 mt-1">
               {errorInfo.userMessage}
             </p>
@@ -76,9 +76,9 @@ const SearchResultsList = ({
     return (
       <div className="mt-4 py-8 px-6 text-center">
         <MagnifyingGlassIcon className="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500" />
-        <h3 className="mt-6 text-lg font-medium text-gray-900 dark:text-white">
+        <h2 className="mt-6 text-lg font-medium text-gray-900 dark:text-white">
           No stocks found
-        </h3>
+        </h2>
         <p className="mt-4 text-sm text-gray-500 dark:text-gray-400 max-w-sm mx-auto leading-relaxed">
           No results for "{query}". Try a different symbol or company name.
         </p>

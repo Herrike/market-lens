@@ -295,9 +295,9 @@ describe("SearchModal Component - Search & Results Flow", () => {
         expect(
           screen.getByText('2 results found for "AAPL"'),
         ).toBeInTheDocument();
-        expect(screen.getByText("AAPL")).toBeInTheDocument();
+        expect(screen.getByTestId("ticker-aapl")).toBeInTheDocument();
         expect(screen.getByText("Apple Inc.")).toBeInTheDocument();
-        expect(screen.getByText("MSFT")).toBeInTheDocument();
+        expect(screen.getByTestId("ticker-msft")).toBeInTheDocument();
         expect(screen.getByText("Microsoft Corporation")).toBeInTheDocument();
       });
     });
@@ -363,7 +363,7 @@ describe("SearchModal Component - Search & Results Flow", () => {
       );
 
       await waitFor(() => {
-        expect(screen.getByText("Search Error")).toBeInTheDocument();
+        expect(screen.getByText("Search failed")).toBeInTheDocument();
         expect(
           screen.getAllByText(
             "Too many requests. Please wait a moment and try again.",
@@ -402,7 +402,9 @@ describe("SearchModal Component - Search & Results Flow", () => {
         </SearchModalWrapper>,
       );
 
-      const appleStock = screen.getByText("Apple Inc.").closest("button");
+      const appleStock = screen
+        .getByRole("heading", { name: "AAPL" })
+        .closest("button");
       await user.click(appleStock!);
 
       expect(setSelectedStock).toHaveBeenCalledWith("AAPL");

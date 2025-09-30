@@ -115,9 +115,7 @@ describe("Stock Detail Display Component", () => {
         </SectionWrapper>,
       );
 
-      expect(
-        screen.queryByTestId("back-to-home-button"),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId("back-btn")).not.toBeInTheDocument();
     });
 
     it("should show search modal when toggle is true", async () => {
@@ -165,7 +163,7 @@ describe("Stock Detail Display Component", () => {
       await waitFor(() => {
         // Chart component is dynamically loaded, so use queryByTestId
         expect(screen.queryByTestId("stock-chart")).toBeInTheDocument();
-        expect(screen.getByTestId("back-to-home-button")).toBeInTheDocument();
+        expect(screen.getByTestId("back-btn")).toBeInTheDocument();
       });
     });
   });
@@ -203,7 +201,7 @@ describe("Stock Detail Display Component", () => {
       });
 
       // Check back button
-      expect(screen.getByTestId("back-to-home-button")).toBeInTheDocument();
+      expect(screen.getByTestId("back-btn")).toBeInTheDocument();
     });
 
     it("should display stock with minimal information", async () => {
@@ -267,7 +265,7 @@ describe("Stock Detail Display Component", () => {
       expect(
         screen.getByRole("heading", { name: "UNKNOWN" }),
       ).toBeInTheDocument();
-      expect(screen.getByText(/Selected Stock Symbol/)).toBeInTheDocument();
+      expect(screen.getByTestId("selected-symbol")).toBeInTheDocument();
 
       // Chart should still be shown (wait for dynamic import)
       await waitFor(() => {
@@ -275,7 +273,7 @@ describe("Stock Detail Display Component", () => {
       });
 
       // Back button should be available
-      expect(screen.getByTestId("back-to-home-button")).toBeInTheDocument();
+      expect(screen.getByTestId("back-btn")).toBeInTheDocument();
     });
   });
 
@@ -352,7 +350,7 @@ describe("Stock Detail Display Component", () => {
         </SectionWrapper>,
       );
 
-      const backButton = screen.getByTestId("back-to-home-button");
+      const backButton = screen.getByTestId("back-btn");
       await user.click(backButton);
 
       expect(setSelectedStock).toHaveBeenCalledWith("");
@@ -372,11 +370,10 @@ describe("Stock Detail Display Component", () => {
         </SectionWrapper>,
       );
 
-      const backButton = screen.getByTestId("back-to-home-button");
+      const backButton = screen.getByTestId("back-btn");
       expect(backButton).toHaveClass("cursor-pointer");
       // Icon is rendered as actual SVG, not our mock
-      expect(screen.getByText("Back to Home")).toBeInTheDocument();
-      expect(screen.getByText("Back to Home")).toBeInTheDocument();
+      expect(screen.getByTestId("back-btn")).toBeInTheDocument();
     });
   });
 
@@ -405,13 +402,13 @@ describe("Stock Detail Display Component", () => {
       expect(
         screen.getByRole("heading", { name: "INVALID" }),
       ).toBeInTheDocument();
-      expect(screen.getByText(/Selected Stock Symbol/)).toBeInTheDocument();
+      expect(screen.getByTestId("selected-symbol")).toBeInTheDocument();
 
       // Chart and back button should still be available
       await waitFor(() => {
         expect(screen.getByTestId("stock-chart")).toBeInTheDocument();
       });
-      expect(screen.getByTestId("back-to-home-button")).toBeInTheDocument();
+      expect(screen.getByTestId("back-btn")).toBeInTheDocument();
     });
   });
 
@@ -462,7 +459,7 @@ describe("Stock Detail Display Component", () => {
       // Main stock name should be a heading
       const heading = screen.getByRole("heading", { name: /apple inc/i });
       expect(heading).toBeInTheDocument();
-      expect(heading.tagName).toBe("H1");
+      expect(heading.tagName).toBe("H2");
     });
 
     it("should provide proper button accessibility", async () => {
@@ -479,7 +476,7 @@ describe("Stock Detail Display Component", () => {
         </SectionWrapper>,
       );
 
-      const backButton = screen.getByTestId("back-to-home-button");
+      const backButton = screen.getByTestId("back-btn");
       // Button doesn't have explicit type attribute, but defaults to button
       expect(backButton.tagName).toBe("BUTTON");
     });

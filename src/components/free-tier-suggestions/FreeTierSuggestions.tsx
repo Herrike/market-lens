@@ -8,9 +8,9 @@ const FreeTierSuggestions = () => {
   return (
     <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-6 mt-6 max-w-2xl mx-auto">
       <div className="text-center mb-4">
-        <h3 className="text-lg font-semibold text-indigo-800 mb-2">
-          📈 Try These Market Indices (Free)
-        </h3>
+        <h2 className="text-lg font-semibold text-indigo-800 mb-2">
+          Free Tier Suggestions
+        </h2>
         <p className="text-sm text-gray-700">
           Historical charts are available for major market indices on the free
           tier

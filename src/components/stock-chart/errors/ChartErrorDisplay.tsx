@@ -26,9 +26,9 @@ const ChartErrorDisplay = ({
           />
         </svg>
         <div className="ml-3 flex-1">
-          <h4 className="text-sm font-medium text-red-800 dark:text-red-200">
-            Chart Loading Error
-          </h4>
+          <h3 className="text-sm font-medium text-red-800 dark:text-red-200">
+            Chart Error
+          </h3>
           <p className="text-sm text-red-700 dark:text-red-300 mt-1">
             {errorInfo.userMessage}
           </p>

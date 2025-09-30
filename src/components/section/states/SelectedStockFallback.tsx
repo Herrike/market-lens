@@ -7,16 +7,13 @@ const SelectedStockFallback = ({
 }: SelectedStockFallbackProps) => {
   return (
     <>
-      <h1
+      <h2
         className="text-3xl font-bold text-gray-900 mb-2"
         data-testid="selected-stock-symbol"
       >
         {selectedStock}
-      </h1>
-      <p
-        className="text-gray-600 mb-6"
-        data-testid="selected-stock-description"
-      >
+      </h2>
+      <p className="text-gray-600 mb-6" data-testid="selected-symbol">
         Selected Stock Symbol <strong>{selectedStock}</strong>
       </p>
     </>
